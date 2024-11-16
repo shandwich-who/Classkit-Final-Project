@@ -1,4 +1,4 @@
-import 'package:finals/login-folder/login-section.dart';
+import 'package:finals/login-folder/login_section.dart';
 import 'package:flutter/material.dart';
 
 class LoginScaffold extends StatelessWidget {
