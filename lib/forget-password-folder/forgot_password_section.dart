@@ -1,21 +1,20 @@
 import 'package:finals/login-folder/login_scaffold.dart';
 import 'package:flutter/material.dart';
 
-class SignupSection extends StatefulWidget {
-  const SignupSection({super.key});
+class ForgotPasswordSection extends StatefulWidget {
+  const ForgotPasswordSection({super.key});
 
   @override
-  State<SignupSection> createState() => _SignupSectionState();
+  State<ForgotPasswordSection> createState() => _ForgotPasswordSectionState();
 }
 
-class _SignupSectionState extends State<SignupSection> {
+class _ForgotPasswordSectionState extends State<ForgotPasswordSection> {
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+  final TextEditingController otpPasswordController =
+      TextEditingController();
   @override
   Widget build(BuildContext context) {
-    final TextEditingController emailController = TextEditingController();
-    final TextEditingController passwordController = TextEditingController();
-    final TextEditingController confirmPasswordController =
-        TextEditingController();
-
     return SafeArea(
       child: SingleChildScrollView(
         padding: EdgeInsets.only(
@@ -29,28 +28,30 @@ class _SignupSectionState extends State<SignupSection> {
             child: Container(
               padding: const EdgeInsets.all(20.0),
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
+                  Row(
+                      children: [
+                        IconButton(onPressed: (){
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const LoginScaffold()),
+                          );
+                        }, icon: const Icon(Icons.arrow_back_rounded))
+                      ],
+                  ),
+
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      //Todo image
                       Image.asset(
-                        "images/signup.png",
+                        "images/forgot.png",
                         height: 220,
                         width: 220,
                       ),
-                      //   const Text(
-                      //     "Sign Up",
-                      //     style: TextStyle(
-                      //         fontSize: 20,
-                      //         fontWeight: FontWeight.bold,
-                      //         color: Color(0xff013237),
-                      //         fontFamily: "Poppins"),
-                      //   ),
                     ],
                   ),
-                  const SizedBox(height: 20),
                   TextField(
                     controller: emailController,
                     decoration: InputDecoration(
@@ -73,7 +74,9 @@ class _SignupSectionState extends State<SignupSection> {
                       ),
                     ),
                   ),
-                  const SizedBox(height: 25),
+                  const SizedBox(
+                    height: 20,
+                  ),
                   TextField(
                     controller: passwordController,
                     obscureText: true,
@@ -97,76 +100,72 @@ class _SignupSectionState extends State<SignupSection> {
                       ),
                     ),
                   ),
-                  const SizedBox(height: 25),
-                  TextField(
-                    controller: confirmPasswordController,
-                    obscureText: true,
-                    decoration: InputDecoration(
-                      labelText: 'Confirm Password',
-                      hintText: "Re-enter your Password",
-                      hintStyle: const TextStyle(color: Colors.grey),
-                      labelStyle: const TextStyle(color: Color(0xff1a1a1a)),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: const BorderSide(
-                            color: Color(0xff1a1a1a), width: 1),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                        borderSide: const BorderSide(
-                            color: Color(0xff1a1a1a), width: 1),
-                      ),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                    ),
+                  const SizedBox(
+                    height: 20,
                   ),
-                  const SizedBox(height: 50),
+                  Row(
+                    children: [
+                      SizedBox(
+                        height: 50,
+                        width: 200,
+                        child: TextField(
+                          controller: otpPasswordController,
+                          decoration: InputDecoration(
+                            labelText: 'OTP',
+                            hintText: "Enter your OTP",
+                            hintStyle: const TextStyle(color: Colors.grey ,fontSize: 13),
+                            labelStyle:
+                                const TextStyle(color: Color(0xff1a1a1a), fontSize: 13),
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: const BorderSide(
+                                  color: Color(0xff1a1a1a), width: 1),
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10),
+                              borderSide: const BorderSide(
+                                  color: Color(0xff1a1a1a), width: 1),
+                            ),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(
+                        width: 5,
+                      ),
+                      ElevatedButton(
+                        onPressed: () {
+                          //todo send otp here
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color(0xff1a1a1a),
+                          foregroundColor:  Colors.white,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ), //elevation: 4,
+                          minimumSize: const Size(10, 45),
+                        ),
+                        child: const Text("Send OTP"),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 40),
                   ElevatedButton(
                     onPressed: () {
-                      //   String email = emailController.text;
-                      //   String password = passwordController.text;
-                      //   print('Email: $email, Password: $password');
                       // TODO: Implement login logic here
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xff4ca771),
-                      foregroundColor: const Color(0xffffffff),
+                      backgroundColor: const Color(0xff77aac7),
+                      foregroundColor: const Color(0xff1a1a1a),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10),
                       ),
                       minimumSize: const Size(double.infinity, 50),
                       elevation: 4,
                     ),
-                    child: const Text('Create Account'),
-                  ),
-                  const SizedBox(height: 40),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      const Text(
-                        "Already have an account ?",
-                        style: TextStyle(
-                          color: Color(0xff1a1a1a),
-                        ),
-                      ),
-                      const SizedBox(width: 4),
-                      GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => const LoginScaffold()));
-                        },
-                        child: const Text(
-                          "Sign in here!",
-                          style: TextStyle(
-                            color: Color(0xff4ca771),
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                    ],
+                    child: const Text('Reset Password'),
                   ),
                 ],
               ),
