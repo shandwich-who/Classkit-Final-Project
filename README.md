@@ -16,12 +16,13 @@ For help getting started with Flutter development, view the
 samples, guidance on mobile development, and a full API reference.
 
 # sign in 
-    # Forget Password - add otp
-    # continue with google
-    #
+    * Forget Password - add otp
+    * continue with google
+    
 # sign up
-    # sign up with otp
+    * sign up with otp
 
-# pos 
-
-# inventory
+# dashboard
+    * pos
+    * search 
+    * inventory
