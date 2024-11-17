@@ -41,7 +41,9 @@ class _ForgotPasswordSectionState extends State<ForgotPasswordSection> {
                         }, icon: const Icon(Icons.arrow_back_rounded))
                       ],
                   ),
-
+                  const SizedBox(
+                    height: 20,
+                  ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -107,7 +109,7 @@ class _ForgotPasswordSectionState extends State<ForgotPasswordSection> {
                     children: [
                       SizedBox(
                         height: 50,
-                        width: 200,
+                        width: 220,
                         child: TextField(
                           controller: otpPasswordController,
                           decoration: InputDecoration(
@@ -135,26 +137,30 @@ class _ForgotPasswordSectionState extends State<ForgotPasswordSection> {
                       const SizedBox(
                         width: 5,
                       ),
-                      ElevatedButton(
-                        onPressed: () {
-                          //todo send otp here
-                        },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xff1a1a1a),
-                          foregroundColor:  Colors.white,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          ), //elevation: 4,
-                          minimumSize: const Size(10, 45),
-                        ),
-                        child: const Text("Send OTP"),
+                      Row(
+                        children: [
+                          ElevatedButton(
+                            onPressed: () {
+                              //* send otp here
+                            },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: const Color(0xff1a1a1a),
+                              foregroundColor:  Colors.white,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ), //elevation: 4,
+                              minimumSize: const Size(00.0,50.0),
+                            ),
+                            child: const Text("Send OTP"),
+                          ),
+                        ],
                       ),
                     ],
                   ),
                   const SizedBox(height: 40),
                   ElevatedButton(
                     onPressed: () {
-                      // TODO: Implement login logic here
+                      // *Implement reset passwod logic here
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xff77aac7),
@@ -176,3 +182,4 @@ class _ForgotPasswordSectionState extends State<ForgotPasswordSection> {
     );
   }
 }
+//Forgot password section

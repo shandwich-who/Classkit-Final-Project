@@ -126,7 +126,7 @@ class _LoginSectionState extends State<LoginSection> {
                       String email = _emailController.text;
                       String password = _passwordController.text;
                       print('Email: $email, Password: $password');
-                      // TODO: Implement login logic here
+                      // *Implement login logic here
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xff4ca771),
@@ -163,7 +163,7 @@ class _LoginSectionState extends State<LoginSection> {
                   const SizedBox(height: 20),
                   ElevatedButton(
                     onPressed: () {
-                      // TODO: Implement Google Sign-In logic here
+                      // *Implement Google Sign-In logic here
                     },
                     style: ElevatedButton.styleFrom(
                       foregroundColor: const Color(0xff1a1a1a),
@@ -244,3 +244,5 @@ class _LoginSectionState extends State<LoginSection> {
     );
   }
 }
+
+//Login Section
