@@ -1,3 +1,5 @@
+import 'package:finals/forget-password-folder/forgot_password_scaffold.dart';
+import 'package:finals/forget-password-folder/forgot_password_section.dart';
 import 'package:finals/signup-folder/signup_scaffold.dart';
 import 'package:flutter/material.dart';
 
@@ -21,8 +23,7 @@ class _LoginSectionState extends State<LoginSection> {
         ),
         child: GestureDetector(
           onTap: () {
-            FocusScope.of(context)
-                .unfocus();
+            FocusScope.of(context).unfocus();
           },
           child: Center(
             child: Container(
@@ -101,12 +102,20 @@ class _LoginSectionState extends State<LoginSection> {
                     children: [
                       GestureDetector(
                         onTap: () {
-                          // TODO: Implement forgot password logic here
+                           Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const ForgotPasswordScaffold()),
+                          );
+
                         },
                         child: const Text(
                           "Forgot Password ?",
-                          style:
-                              TextStyle(color: Color(0xff1a1a1a), fontSize: 10,fontWeight: FontWeight.bold, fontFamily: "Poppins"),
+                          style: TextStyle(
+                              color: Color(0xff1a1a1a),
+                              fontSize: 10,
+                              fontWeight: FontWeight.bold,
+                              fontFamily: "Poppins"),
                         ),
                       ),
                     ],
