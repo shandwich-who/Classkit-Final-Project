@@ -6,8 +6,8 @@ import 'package:flutter/material.dart';
 void main() {
   runApp(
     // const LoginScaffold()
-    // const SplashScreenScaffold()
-    const SignupScaffold()
+    const SplashScreenScaffold()
+    // const SignupScaffold()
   );
 }
 

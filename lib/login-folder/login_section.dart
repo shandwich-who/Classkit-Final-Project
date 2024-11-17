@@ -77,7 +77,7 @@ class _LoginSectionState extends State<LoginSection> {
                     obscureText: true,
                     decoration: InputDecoration(
                       labelText: 'Password',
-                      hintText: "",
+                      hintText: "Enter your Password",
                       hintStyle: const TextStyle(color: Colors.grey),
                       labelStyle: const TextStyle(color: Color(0xff1a1a1a)),
                       focusedBorder: OutlineInputBorder(
@@ -169,13 +169,13 @@ class _LoginSectionState extends State<LoginSection> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        const SizedBox(width: 10),
+                        // const SizedBox(width: 15),
                         Image.asset(
                           'images/google.png',
                           height: 24,
                           width: 24,
                         ),
-                        const SizedBox(width: 35),
+                        const SizedBox(width: 60),
                         const Text('Sign in with Google'),
                       ],
                     ),
