@@ -11,14 +11,14 @@ class DashboardScaffold extends StatelessWidget {
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(
       const SystemUiOverlayStyle(
-        systemNavigationBarColor: Colors.black,
+        systemNavigationBarColor: Colors.white,
         // statusBarColor: Colors.transparent,
       ),
     );
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
-        // backgroundColor: Colors.white70,
+        // backgroundColor: Colors.lightBlueAccent,
         resizeToAvoidBottomInset: true,
         // appBar: PosAppBarSection(),
         body: Obx(() => controlNavBar.pages[controlNavBar.index.value]),

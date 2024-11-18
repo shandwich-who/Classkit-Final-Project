@@ -9,6 +9,7 @@ class InventoryScaffold extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: const Scaffold(
+        backgroundColor: Colors.white,
         resizeToAvoidBottomInset: true,
         body: InventorySection(),
       ),

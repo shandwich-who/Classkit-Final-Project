@@ -13,6 +13,6 @@ class PosScaffold extends StatelessWidget {
         appBar: PosAppBarSection(),
       ),
       theme: ThemeData(useMaterial3: false),
-    );;
+    );
   }
 }
