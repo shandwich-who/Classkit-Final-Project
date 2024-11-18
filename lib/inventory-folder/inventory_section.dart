@@ -10,8 +10,10 @@ class InventorySection extends StatefulWidget {
 class _InventorySectionState extends State<InventorySection> {
   @override
   Widget build(BuildContext context) {
-    return Center(child: Container(
-      child: const Text("Inventory Section"),
-    ),);
+    return Center(
+      child: Container(
+        child: const Text("Inventory Section"),
+      ),
+    );
   }
 }

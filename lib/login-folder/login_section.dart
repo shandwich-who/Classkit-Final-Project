@@ -1,3 +1,4 @@
+import 'package:finals/dashboard-folder/dashboard_scaffold.dart';
 import 'package:finals/forget-password-folder/forgot_password_scaffold.dart';
 import 'package:finals/forget-password-folder/forgot_password_section.dart';
 import 'package:finals/signup-folder/signup_scaffold.dart';
@@ -123,10 +124,15 @@ class _LoginSectionState extends State<LoginSection> {
                   const SizedBox(height: 36),
                   ElevatedButton(
                     onPressed: () {
-                      String email = _emailController.text;
-                      String password = _passwordController.text;
-                      print('Email: $email, Password: $password');
+                      // String email = _emailController.text;
+                      // String password = _passwordController.text;
+                      // print('Email: $email, Password: $password');
                       // *Implement login logic here
+                      Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const DashboardScaffold()),
+                          );
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xff4ca771),
