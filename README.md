@@ -16,13 +16,26 @@ For help getting started with Flutter development, view the
 samples, guidance on mobile development, and a full API reference.
 
 # sign in 
-    * Forget Password - add otp
-    * continue with google
+    hide * Forget Password - add otp
+    hide * continue with google
     
 # sign up
-    * sign up with otp
+    hide 
+    * not implemented sign up with otp
 
 # dashboard
     * pos
-    * search 
+        # appbar
+        # Cart
+        # Categories
+        # search
+    * settings
+        # Logout
     * inventory
+        
+        # add
+            pop up to add
+        # edit
+            slide left and pop up container or dialog to edit the slide app
+        # delete
+            slide right to delete the item in inventory 

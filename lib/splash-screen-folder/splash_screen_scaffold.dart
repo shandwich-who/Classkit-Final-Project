@@ -1,5 +1,6 @@
 import 'package:finals/splash-screen-folder/splash_screen_section.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class SplashScreenScaffold extends StatefulWidget {
   const SplashScreenScaffold({super.key});
@@ -11,6 +12,12 @@ class SplashScreenScaffold extends StatefulWidget {
 class _SplashScreenScaffoldState extends State<SplashScreenScaffold> {
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(
+      const SystemUiOverlayStyle(
+        systemNavigationBarColor: Colors.white,
+        // statusBarColor: Colors.transparent,
+      ),
+    );
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: const Scaffold(

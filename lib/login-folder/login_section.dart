@@ -1,6 +1,4 @@
 import 'package:finals/dashboard-folder/dashboard_scaffold.dart';
-import 'package:finals/forget-password-folder/forgot_password_scaffold.dart';
-import 'package:finals/forget-password-folder/forgot_password_section.dart';
 import 'package:finals/signup-folder/signup_scaffold.dart';
 import 'package:flutter/material.dart';
 
@@ -98,41 +96,41 @@ class _LoginSectionState extends State<LoginSection> {
                     ),
                   ),
                   const SizedBox(height: 10),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      GestureDetector(
-                        onTap: () {
-                           Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const ForgotPasswordScaffold()),
-                          );
-
-                        },
-                        child: const Text(
-                          "Forgot Password ?",
-                          style: TextStyle(
-                              color: Color(0xff1a1a1a),
-                              fontSize: 10,
-                              fontWeight: FontWeight.bold,
-                              fontFamily: "Poppins"),
-                        ),
-                      ),
-                    ],
-                  ),
+                  // Row(
+                  //   mainAxisAlignment: MainAxisAlignment.end,
+                  //   children: [
+                  //     GestureDetector(
+                  //       onTap: () {
+                  //         Navigator.push(
+                  //           context,
+                  //           MaterialPageRoute(
+                  //               builder: (context) =>
+                  //                   const ForgotPasswordScaffold()),
+                  //         );
+                  //       },
+                  //       child: const Text(
+                  //         "Forgot Password ?",
+                  //         style: TextStyle(
+                  //             color: Color(0xff1a1a1a),
+                  //             fontSize: 10,
+                  //             fontWeight: FontWeight.bold,
+                  //             fontFamily: "Poppins"),
+                  //       ),
+                  //     ),
+                  //   ],
+                  // ),
                   const SizedBox(height: 36),
                   ElevatedButton(
                     onPressed: () {
                       // String email = _emailController.text;
                       // String password = _passwordController.text;
                       // print('Email: $email, Password: $password');
-                      // *Implement login logic here
+                      // * Implement login logic here
                       Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const DashboardScaffold()),
-                          );
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const DashboardScaffold()),
+                      );
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xff4ca771),
@@ -146,55 +144,56 @@ class _LoginSectionState extends State<LoginSection> {
                     child: const Text('LOGIN'),
                   ),
                   const SizedBox(height: 20),
-                  const Row(
-                    children: [
-                      Expanded(
-                        child: Divider(
-                          color: Colors.black,
-                          thickness: 0.5,
-                        ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 10.0),
-                        child: Text("Or sign in with"),
-                      ),
-                      Expanded(
-                        child: Divider(
-                          color: Colors.black,
-                          thickness: 0.5,
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 20),
-                  ElevatedButton(
-                    onPressed: () {
-                      // *Implement Google Sign-In logic here
-                    },
-                    style: ElevatedButton.styleFrom(
-                      foregroundColor: const Color(0xff1a1a1a),
-                      backgroundColor: const Color(0xffffffff),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      minimumSize: const Size(double.infinity, 50),
-                      elevation: 4,
-                      shadowColor: const Color(0xff1a1a1a),
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        // const SizedBox(width: 15),
-                        Image.asset(
-                          'images/google.png',
-                          height: 24,
-                          width: 24,
-                        ),
-                        const SizedBox(width: 60),
-                        const Text('Sign in with Google'),
-                      ],
-                    ),
-                  ),
+                  // const Row(
+                  //   children: [
+                  //     Expanded(
+                  //       child: Divider(
+                  //         color: Colors.black,
+                  //         thickness: 0.5,
+                  //       ),
+                  //     ),
+                  //     Padding(
+                  //       padding: EdgeInsets.symmetric(horizontal: 10.0),
+                  //       child: Text("Or sign in with"),
+                  //     ),
+                  //     Expanded(
+                  //       child: Divider(
+                  //         color: Colors.black,
+                  //         thickness: 0.5,
+                  //       ),
+                  //     ),
+                  //   ],
+                  // ),
+                  // const SizedBox(height: 20),
+                  // hide this for temporary
+                  // ElevatedButton(
+                  //   onPressed: () {
+                  //     // *Implement Google Sign-In logic here
+                  //   },
+                  //   style: ElevatedButton.styleFrom(
+                  //     foregroundColor: const Color(0xff1a1a1a),
+                  //     backgroundColor: const Color(0xffffffff),
+                  //     shape: RoundedRectangleBorder(
+                  //       borderRadius: BorderRadius.circular(10),
+                  //     ),
+                  //     minimumSize: const Size(double.infinity, 50),
+                  //     elevation: 4,
+                  //     shadowColor: const Color(0xff1a1a1a),
+                  //   ),
+                  //   child: Row(
+                  //     mainAxisAlignment: MainAxisAlignment.start,
+                  //     children: [
+                  //       // const SizedBox(width: 15),
+                  //       Image.asset(
+                  //         'images/google.png',
+                  //         height: 24,
+                  //         width: 24,
+                  //       ),
+                  //       const SizedBox(width: 60),
+                  //       const Text('Sign in with Google'),
+                  //     ],
+                  //   ),
+                  // ),
                   const SizedBox(height: 40),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.start,
