@@ -1,14 +1,15 @@
-import 'package:finals/splash-screen-folder/splash_screen_scaffold.dart';
 import 'package:flutter/material.dart';
+
+import 'dashboard-folder/dashboard_scaffold.dart';
 
 void main() {
   try {
     runApp(
         // const LoginScaffold()
-        const SplashScreenScaffold()
+        // const SplashScreenScaffold()
         // const SignupScaffold()
         // const ForgotPasswordScaffold()
-        // const DashboardScaffold()
+        const DashboardScaffold()
         // const InventoryScaffold());
         );
   } catch (e) {

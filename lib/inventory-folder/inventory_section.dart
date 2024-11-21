@@ -177,15 +177,15 @@ class _InventorySectionState extends State<InventorySection> {
 // //* this is for the app bar
 // class InventoryAppBar extends StatefulWidget implements PreferredSizeWidget {
 //   const InventoryAppBar({super.key});
-//
+
 //   @override
 //   State<InventoryAppBar> createState() => _InventoryAppBarState();
-//
+
 //   @override
 //   // TODO: implement preferredSize
 //   Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 // }
-//
+
 // class _InventoryAppBarState extends State<InventoryAppBar> {
 //   @override
 //   Widget build(BuildContext context) {

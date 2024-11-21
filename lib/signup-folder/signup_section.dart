@@ -40,14 +40,14 @@ class _SignupSectionState extends State<SignupSection> {
                         height: 220,
                         width: 220,
                       ),
-                      //   const Text(
-                      //     "Sign Up",
-                      //     style: TextStyle(
-                      //         fontSize: 20,
-                      //         fontWeight: FontWeight.bold,
-                      //         color: Color(0xff013237),
-                      //         fontFamily: "Poppins"),
-                      //   ),
+                      const Text(
+                        "Sign Up",
+                        style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            color: Color(0xff013237),
+                            fontFamily: "Poppins"),
+                      ),
                     ],
                   ),
                   const SizedBox(height: 20),
@@ -124,9 +124,9 @@ class _SignupSectionState extends State<SignupSection> {
                   const SizedBox(height: 50),
                   ElevatedButton(
                     onPressed: () {
-                      //   String email = emailController.text;
-                      //   String password = passwordController.text;
-                      //   print('Email: $email, Password: $password');
+                      // String email = emailController.text;
+                      // String password = passwordController.text;
+                      // print('Email: $email, Password: $password');
                       // TODO: Implement login logic here
                     },
                     style: ElevatedButton.styleFrom(

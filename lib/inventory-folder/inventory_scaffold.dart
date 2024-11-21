@@ -22,7 +22,7 @@ class InventoryScaffold extends StatelessWidget {
         // appBar: InventoryAppBar(),
         appBar: AppBar(
           centerTitle: true,
-          title: Text("Inventory"),
+          title: const Text("Inventory"),
         ), //temporary
         body: const InventorySection(),
       ),

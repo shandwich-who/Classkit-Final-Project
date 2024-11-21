@@ -30,14 +30,14 @@ class _DashboardSectionState extends State<DashboardSection> {
     ),
 
     // Gradient for Search (Index 1)
-    // const LinearGradient(
-    //   colors: [
-    //     Color(0xff89F7FE),
-    //     Color(0xff66A6FF)
-    //   ], // Cool blue tones for clarity and focus
-    //   begin: Alignment.topLeft,
-    //   end: Alignment.bottomRight,
-    // ),
+    const LinearGradient(
+      colors: [
+        Color(0xff89F7FE),
+        Color(0xff66A6FF)
+      ], // Cool blue tones for clarity and focus
+      begin: Alignment.topLeft,
+      end: Alignment.bottomRight,
+    ),
 
     // Gradient for Inventory (Index 2)
     const LinearGradient(
@@ -69,9 +69,7 @@ class _DashboardSectionState extends State<DashboardSection> {
           ],
         ),
         child: Padding(
-          // padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 20),
-          padding:
-              const EdgeInsets.only(left: 80, right: 80, top: 20, bottom: 20),
+          padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 20),
           child: GNav(
             // activeColor: _activeColor[_selectedIndex],
             tabBackgroundGradient: _tabGradient[_selectedIndex],
@@ -103,7 +101,7 @@ class _DashboardSectionState extends State<DashboardSection> {
               //   icon: Icons.search,
               //   text: "Search",
               // ),
-              // GButton(icon: Icons.settings_rounded, text: "Settings"),
+              GButton(icon: Icons.settings_rounded, text: "Settings"),
               GButton(
                 icon: Icons.inventory_2_outlined,
                 text: "Inventory",
