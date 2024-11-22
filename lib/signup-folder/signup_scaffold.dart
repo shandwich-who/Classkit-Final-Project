@@ -19,7 +19,7 @@ class SignupScaffold extends StatelessWidget {
       home: const Scaffold(
         resizeToAvoidBottomInset:
           true,
-        backgroundColor: Colors.white,
+        backgroundColor: Color(0xffFAF9F6),
         body: SignupSection(),
       ),
       theme: ThemeData(useMaterial3: false),

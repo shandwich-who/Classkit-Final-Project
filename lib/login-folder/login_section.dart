@@ -104,8 +104,8 @@ class _LoginSectionState extends State<LoginSection> {
                         child: const Text(
                           "Forgot Password ?",
                           style: TextStyle(
-                              color: Color(0xff1a1a1a),
-                              fontSize: 10,
+                              color: Color(0xff000000),
+                              fontSize: 12,
                               fontWeight: FontWeight.bold,
                               fontFamily: "Poppins"),
                         ),
@@ -126,7 +126,7 @@ class _LoginSectionState extends State<LoginSection> {
                       // );
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xff4ca771),
+                      backgroundColor: const Color(0xff4da674),
                       foregroundColor: const Color(0xff1a1a1a),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10),
@@ -194,6 +194,8 @@ class _LoginSectionState extends State<LoginSection> {
                         "Don't have an account yet?",
                         style: TextStyle(
                           color: Color(0xff1a1a1a),
+                          fontFamily: "Poppins",
+                          fontSize: 11,
                         ),
                       ),
                       const SizedBox(width: 4),
@@ -208,24 +210,10 @@ class _LoginSectionState extends State<LoginSection> {
                         child: const Text(
                           "Sign up here!",
                           style: TextStyle(
-                            color: Color(0xff4ca771),
+                            color: Color(0xff000000),
                             fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                      TextButton(
-                        onPressed: () {
-                          // Navigator.push(
-                          //   context,
-                          //   MaterialPageRoute(
-                          //       builder: (context) => const SignupScaffold()),
-                          // );
-                        },
-                        child: const Text(
-                          "Sign up here!",
-                          style: TextStyle(
-                            color: Color(0xff4ca771),
-                            fontWeight: FontWeight.bold,
+                            fontSize: 12,
+                            fontFamily: "Poppins",
                           ),
                         ),
                       ),
