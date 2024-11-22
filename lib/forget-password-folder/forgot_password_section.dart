@@ -144,7 +144,7 @@ class _ForgotPasswordSectionState extends State<ForgotPasswordSection> {
                               //* send otp here
                             },
                             style: ElevatedButton.styleFrom(
-                              backgroundColor: const Color(0xff1a1a1a),
+                              backgroundColor: const Color(0xff3e3c6e),
                               foregroundColor:  Colors.white,
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(10),
@@ -163,8 +163,8 @@ class _ForgotPasswordSectionState extends State<ForgotPasswordSection> {
                       // *Implement reset passwod logic here
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xff77aac7),
-                      foregroundColor: const Color(0xff1a1a1a),
+                      backgroundColor: const Color(0xff3e3c6e),
+                      foregroundColor: const Color(0xffffffff),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10),
                       ),

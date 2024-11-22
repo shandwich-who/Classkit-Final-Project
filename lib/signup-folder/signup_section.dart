@@ -40,14 +40,14 @@ class _SignupSectionState extends State<SignupSection> {
                         height: 220,
                         width: 220,
                       ),
-                      const Text(
-                        "Sign Up",
-                        style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                            color: Color(0xff013237),
-                            fontFamily: "Poppins"),
-                      ),
+                      // const Text(
+                      //   "Sign Up",
+                      //   style: TextStyle(
+                      //       fontSize: 20,
+                      //       fontWeight: FontWeight.bold,
+                      //       color: Color(0xff013237),
+                      //       fontFamily: "Poppins"),
+                      // ),
                     ],
                   ),
                   const SizedBox(height: 20),
@@ -130,8 +130,8 @@ class _SignupSectionState extends State<SignupSection> {
                       // TODO: Implement login logic here
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xff4ca771),
-                      foregroundColor: const Color(0xffffffff),
+                      backgroundColor: const Color(0xff77abb6),
+                      foregroundColor: const Color(0xff000000),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10),
                       ),
@@ -147,7 +147,9 @@ class _SignupSectionState extends State<SignupSection> {
                       const Text(
                         "Already have an account ?",
                         style: TextStyle(
-                          color: Color(0xff1a1a1a),
+                          color: Color(0xff000000),
+                          fontFamily: "Poppins",
+                          fontSize: 11,
                         ),
                       ),
                       const SizedBox(width: 4),
@@ -161,8 +163,10 @@ class _SignupSectionState extends State<SignupSection> {
                         child: const Text(
                           "Sign in here!",
                           style: TextStyle(
-                            color: Color(0xff4ca771),
+                            color: Color(0xff000000),
                             fontWeight: FontWeight.bold,
+                            fontFamily: "Poppins",
+                            fontSize: 12,
                           ),
                         ),
                       ),

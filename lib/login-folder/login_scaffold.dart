@@ -17,7 +17,7 @@ class LoginScaffold extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       home: const Scaffold(
         // backgroundColor: Color(0xffeaf9e7),
-        backgroundColor: Colors.white,
+        backgroundColor: Color(0xffFAF9F6),
         resizeToAvoidBottomInset:
           true,
         body: LoginSection(),
