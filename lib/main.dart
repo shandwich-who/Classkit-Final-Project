@@ -1,20 +1,21 @@
+import 'package:finals/auth-user/auth_scaffold.dart';
+import 'package:finals/firebase_options.dart';
 import 'package:finals/login-folder/login_scaffold.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
-
-void main() {
-  try {
-    runApp(
-        const LoginScaffold()
-        // const SplashScreenScaffold()
-        // const SignupScaffold()
-        // const ForgotPasswordScaffold()
-        // const DashboardScaffold()
-        // const InventoryScaffold());
-        );
-  } catch (e) {
-    Dialog(
-      child: Text(e.toString()),
-    );
-  }
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+  runApp(
+      const AuthScaffold()
+      //const LoginScaffold()
+      // const SplashScreenScaffold()
+      // const SignupScaffold()
+      // const ForgotPasswordScaffold()
+      // const DashboardScaffold()
+      // const InventoryScaffold());
+      );
 }

@@ -1,6 +1,7 @@
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:finals/signup-folder/signup_scaffold.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-
 import '../forget-password-folder/forgot_password_scaffold.dart';
 
 class LoginSection extends StatefulWidget {
@@ -13,6 +14,47 @@ class LoginSection extends StatefulWidget {
 class _LoginSectionState extends State<LoginSection> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+  void signUserIn() async {
+    try {
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: _emailController.text,
+        password: _passwordController.text,
+      );
+    } on FirebaseAuthException catch (e) {
+        String errorMessage;
+
+    if (e.code == 'user-not-found') {
+      errorMessage = 'No user found for that email.';
+    } else if (e.code == 'wrong-password') {
+      errorMessage = 'Incorrect password.';
+    } else {
+      errorMessage = 'An unknown error occurred. Please try again later.';
+    }
+
+    final materialBanner = MaterialBanner(
+      elevation: 0,
+      backgroundColor: Colors.transparent,
+      content: AwesomeSnackbarContent(
+        title: 'Oh Snap!',
+        message: errorMessage,
+        contentType: ContentType.failure,
+        inMaterialBanner: true,
+      ),
+      actions: const [SizedBox.shrink()],
+    );
+    // ignore: use_build_context_synchronously
+    ScaffoldMessenger.of(context)
+      ..hideCurrentMaterialBanner()
+      ..showMaterialBanner(materialBanner);
+      }
+
+    }
+    @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -115,15 +157,7 @@ class _LoginSectionState extends State<LoginSection> {
                   const SizedBox(height: 36),
                   ElevatedButton(
                     onPressed: () {
-                      String email = _emailController.text;
-                      String password = _passwordController.text;
-                      print('Email: $email, Password: $password');
-                      // * Implement login logic here
-                      // Navigator.push(
-                      //   context,
-                      //   MaterialPageRoute(
-                      //       builder: (context) => const DashboardScaffold()),
-                      // );
+                      signUserIn();//implemented the sign in 
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xff4da674),
