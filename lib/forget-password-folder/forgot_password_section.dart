@@ -48,9 +48,9 @@ class _ForgotPasswordSectionState extends State<ForgotPasswordSection> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Image.asset(
-                        "images/forgot.png",
-                        height: 220,
-                        width: 220,
+                        "images/recovery.png",
+                        height: 200,
+                        width: 200,
                       ),
                     ],
                   ),
