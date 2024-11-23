@@ -16,16 +16,16 @@ For help getting started with Flutter development, view the
 samples, guidance on mobile development, and a full API reference.
 
 # sign in 
-    * Forget Password - add otp
-    * continue with google
-    * Login
-        improve the error message
-        put an animated loading before loging in
+    * Forget Password - add otp x
+    * continue with google x
+    * Login O
+        improve the error message O
+        put an animated loading before loging in x
 
     
 # sign up
-    target
-    * not implemented sign up
+    
+    add verification if the email are valid
 
 # dashboard
     * pos
