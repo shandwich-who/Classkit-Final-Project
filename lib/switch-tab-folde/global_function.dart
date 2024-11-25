@@ -1,9 +1,9 @@
 import 'package:animated_snack_bar/animated_snack_bar.dart';
 import 'package:finals/inventory-folder/inventory_scaffold.dart';
 import 'package:finals/pos-folder/pos_scaffold.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
 import '../search-folder/search_scaffold.dart';
 
 class BnbController extends GetxController {
@@ -71,131 +71,32 @@ String? validatePassword(String? value) {
   return null;
 }
 
-void showErrorMessage(
+void showMessage(
     {required BuildContext context,
     String? message,
-    AnimatedSnackBarType? typecolor,
+    AnimatedSnackBarType? typeColor,
     Duration? duration}) {
   AnimatedSnackBar.material(
     message!,
-    type: typecolor!,
+    type: typeColor!,
     borderRadius: BorderRadius.circular(16),
-    animationDuration: Durations.short4,
+    animationDuration: duration!,
   ).show(context);
 }
 
-Future<void> signUserIn({
-  required String email,
-  required String password,
-  required BuildContext context,
-}) async {
-  try {
-    await FirebaseAuth.instance.signInWithEmailAndPassword(
-      email: email,
-      password: password,
-    );
-  } on FirebaseAuthException catch (e) {
-    String errorMessage;
-    switch (e.code) {
-      default:
-        errorMessage = e.code.toString();
-        
-    }
-    AnimatedSnackBar.rectangle(
-            "Oops! Something went wrong",
-            animationCurve: Curves.bounceInOut,
-            errorMessage,
-            type: AnimatedSnackBarType.error,
-            animationDuration: Durations.short4,
-            brightness: Brightness.dark)
-        .show(context);
-  }
-}
-
-Future<void> signUserUp({
-  required String email,
-  required String password,
-  required String confirmPassword,
-  required BuildContext context,
-}) async {
-  try {
-    if (password == confirmPassword) {
-      await FirebaseAuth.instance.createUserWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
-    } else {
-      AnimatedSnackBar.rectangle(
-        "Oops! Something went wrong",
-        "Oops! Your passwords don't match. Please try again.",
-        type: AnimatedSnackBarType.error,
-        brightness: Brightness.dark,
-      ).show(
-        context,
-      );
-      return;
-    }
-    // AnimatedSnackBar.rectangle(
-    //   'Success',
-    //   'You successfully created an account',
-    //   type: AnimatedSnackBarType.success,
-    //   brightness: Brightness.light,
-    // ).show(
-    //   // ignore: use_build_context_synchronously
-    //   context,
-    // );
-    // Navigator.push(
-    //   // ignore: use_build_context_synchronously
-    //   context,
-    //   MaterialPageRoute(builder: (context) => const AuthSection()),
-    // );
-  } on FirebaseAuthException catch (e) {
-    String errorMessage;
-    switch (e.code) {
-      default:
-        errorMessage = e.code.toString();
-    }
-
-    AnimatedSnackBar.rectangle(
-      "Oops! Something went wrong",
-      errorMessage,
-      type: AnimatedSnackBarType.error,
-      brightness: Brightness.dark,
-      // ignore: use_build_context_synchronously
-    ).show(context);
-  }
-}
-
-Future<void> signUserOut({required BuildContext context}) async {
-  try {
-    await FirebaseAuth.instance.signOut();
-  } on FirebaseAuthException catch (e) {
-    String message = e.code.toString();
-    AnimatedSnackBar.rectangle(
-      "Oops! Something went wrong",
-      message,
-      type: AnimatedSnackBarType.error,
-      brightness: Brightness.dark,
-      // ignore: use_build_context_synchronously
-    ).show(context);
-  }
-}
-
-// await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
-
-Future resetUserPassword({
-  required String email,
-  required BuildContext context,
-}) async {
-  try {
-    await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
-  } on FirebaseAuthException catch (e) {
-    AnimatedSnackBar.rectangle(
-      "Oops! Something went wrong",
-      e.code.toString(),
-      type: AnimatedSnackBarType.error,
-      brightness: Brightness.dark,
-      // ignore: use_build_context_synchronously
-    ).show(context);
-  }
-}
+// class UserController {
+//   static Future<User?> loginWithGoogle() async {
+//     final googleAccount = await GoogleSignIn().signIn();
+//
+//     final googleAuth = await googleAccount?.authentication;
+//
+//     final credential = GoogleAuthProvider.credential(
+//         accessToken: googleAuth?.accessToken, idToken: googleAuth?.idToken);
+//
+//     final userCredential = await FirebaseAuth.instance.signInWithCredential(
+//       credential,
+//     );
+//
+//     return userCredential.user;
+//   }
+// }

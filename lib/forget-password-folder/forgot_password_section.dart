@@ -1,6 +1,7 @@
 import 'package:animated_snack_bar/animated_snack_bar.dart';
 import 'package:finals/login-folder/login_scaffold.dart';
 import 'package:finals/switch-tab-folde/global_function.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class ForgotPasswordSection extends StatefulWidget {
@@ -14,6 +15,31 @@ class _ForgotPasswordSectionState extends State<ForgotPasswordSection> {
   final TextEditingController _emailController = TextEditingController();
 
   final _formKey = GlobalKey<FormState>();
+
+  Future _resetUserPassword() async {
+    try {
+      await FirebaseAuth.instance
+          .sendPasswordResetEmail(email: _emailController.text.trim());
+      if (mounted) {
+        showMessage(
+          context: context,
+          message: "A password reset link has been sent to your email.",
+          duration: const Duration(milliseconds: 1500),
+          typeColor: AnimatedSnackBarType.success,
+        );
+      }
+    } on FirebaseAuthException catch (e) {
+      String message = e.code.toString();
+      if (mounted) {
+        showMessage(
+          context: context,
+          message: message,
+          duration: const Duration(milliseconds: 1500),
+          typeColor: AnimatedSnackBarType.error,
+        );
+      }
+    }
+  }
 
   @override
   void dispose() {
@@ -94,16 +120,17 @@ class _ForgotPasswordSectionState extends State<ForgotPasswordSection> {
                     ElevatedButton(
                       onPressed: () {
                         if (_formKey.currentState?.validate() ?? false) {
-                          final email = _emailController.text.trim();
-                          resetUserPassword(context: context, email: email);
-                          
+                          _resetUserPassword;
                         } else {
-                          showErrorMessage(
+                          if (mounted) {
+                            showMessage(
                               context: context,
                               message:
-                                  "Please review the form and correct any highlighted errors.",
-                              typecolor: AnimatedSnackBarType.error,
-                              duration: Durations.short4);
+                                  "Hmm, something's not quite right. Please check your login details and try again.",
+                              duration: const Duration(milliseconds: 1500),
+                              typeColor: AnimatedSnackBarType.error,
+                            );
+                          }
                         }
                       },
                       style: ElevatedButton.styleFrom(
@@ -116,7 +143,6 @@ class _ForgotPasswordSectionState extends State<ForgotPasswordSection> {
                         elevation: 4,
                       ),
                       child: const Text('Send Link'),
-                      
                     ),
                   ],
                 ),

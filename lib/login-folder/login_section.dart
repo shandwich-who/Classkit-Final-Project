@@ -2,7 +2,9 @@ import 'package:animated_snack_bar/animated_snack_bar.dart';
 import 'package:finals/auth-user/auth_section.dart';
 import 'package:finals/signup-folder/signup_scaffold.dart';
 import 'package:finals/switch-tab-folde/global_function.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+
 import '../forget-password-folder/forgot_password_scaffold.dart';
 
 class LoginSection extends StatefulWidget {
@@ -17,6 +19,36 @@ class _LoginSectionState extends State<LoginSection> {
   final _passwordController = TextEditingController();
 
   final _formKey = GlobalKey<FormState>();
+
+  Future<void> _signUserIn() async {
+    try {
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: _emailController.text,
+        password: _passwordController.text,
+      );
+
+      if (mounted) {
+        showMessage(
+          context: context,
+          message: "Successfully Login",
+          duration: const Duration(milliseconds: 1500),
+          typeColor: AnimatedSnackBarType.success,
+        );
+      }
+    } on FirebaseAuthException catch (e) {
+      String message = e.code.toString();
+
+      // Check if the widget is still mounted before showing the message
+      if (mounted) {
+        showMessage(
+          context: context,
+          message: message,
+          duration: const Duration(milliseconds: 1500),
+          typeColor: AnimatedSnackBarType.error,
+        );
+      }
+    }
+  }
 
   @override
   void dispose() {
@@ -139,29 +171,21 @@ class _LoginSectionState extends State<LoginSection> {
                         ElevatedButton(
                           onPressed: () {
                             if (_formKey.currentState?.validate() ?? false) {
+                              _signUserIn;
 
-                              signUserIn(
-                                  email: _emailController.text,
-                                  password: _passwordController.text,
-                                  context: context);
-                              AnimatedSnackBar.rectangle(
-                                'Successfully Logging in',
-                                "Hello Welcome ${_emailController.text}",
-                                type: AnimatedSnackBarType.success,
-                                brightness: Brightness.dark,
-                                animationDuration: Durations.short1,
-                              ).show(context);
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
                                       builder: (context) =>
                                           const AuthSection()));
                             } else {
-                              showErrorMessage(
-                                  context: context,
-                                  message: "Please review the form and correct any highlighted errors.",
-                                  typecolor: AnimatedSnackBarType.error,
-                                  duration: Durations.short4);
+                              showMessage(
+                                context: context,
+                                message:
+                                    "Hmm, something's not quite right. Please check your login details and try again.",
+                                duration: const Duration(milliseconds: 1500),
+                                typeColor: AnimatedSnackBarType.error,
+                              );
                             }
                           },
                           style: ElevatedButton.styleFrom(
@@ -201,8 +225,27 @@ class _LoginSectionState extends State<LoginSection> {
                   ),
                   const SizedBox(height: 20),
                   ElevatedButton(
-                    onPressed: () {
-                      // *Implement Google Sign-In logic here
+                    onPressed: () async {
+                      // try {
+                      //   final user = await UserController.loginWithGoogle();
+                      //   if (user != null) {
+                      //     if (mounted) {
+                      //       Navigator.of(context).push(MaterialPageRoute(
+                      //         builder: (context) => const AuthSection(),
+                      //       ));
+                      //     }
+                      //   }
+                      // } on FirebaseAuthException catch (e) {
+                      //   String mess = e.code;
+                      //   if (mounted) {
+                      //     showMessage(
+                      //       context: context,
+                      //       message: mess,
+                      //       duration: const Duration(milliseconds: 1500),
+                      //       typeColor: AnimatedSnackBarType.error,
+                      //     );
+                      //   }
+                      // }
                     },
                     style: ElevatedButton.styleFrom(
                       foregroundColor: const Color(0xff1a1a1a),
