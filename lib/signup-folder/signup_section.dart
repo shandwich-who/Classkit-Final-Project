@@ -1,7 +1,7 @@
-import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
+// import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
+import 'package:animated_snack_bar/animated_snack_bar.dart';
 import 'package:finals/login-folder/login_scaffold.dart';
 import 'package:finals/switch-tab-folde/global_function.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class SignupSection extends StatefulWidget {
@@ -28,87 +28,6 @@ class _SignupSectionState extends State<SignupSection> {
     return null;
   }
 
-  // void showErrorMessage(String message) {
-  //   showDialog(
-  //       context: context,
-  //       builder: (context) {
-  //         return AlertDialog(
-  //           backgroundColor: Colors.redAccent,
-  //           title: Center(
-  //             child: Text(
-  //               message,
-  //               style: const TextStyle(color: Colors.black),
-  //             ),
-  //           ),
-  //         );
-  //       });
-  // }
-
-  void signUserUp() async {
-    try {
-      if (passwordController.text == confirmPasswordController.text) {
-        await FirebaseAuth.instance.createUserWithEmailAndPassword(
-          email: emailController.text,
-          password: confirmPasswordController.text,
-        );
-      } else {
-        var materialBanner = const MaterialBanner(
-          elevation: 0,
-          backgroundColor: Colors.transparent,
-          content: AwesomeSnackbarContent(
-            title: 'Oh Snap!',
-            message: "Passwords do not match",
-            contentType: ContentType.failure,
-            inMaterialBanner: true,
-          ),
-          actions: [SizedBox.shrink()],
-        );
-        ScaffoldMessenger.of(context)
-          ..hideCurrentMaterialBanner()
-          ..showMaterialBanner(materialBanner);
-
-        Future.delayed(const Duration(seconds: 3), () {
-          ScaffoldMessenger.of(context).hideCurrentMaterialBanner();
-        });
-      }
-    } on FirebaseAuthException catch (e) {
-      Navigator.pop(context);
-
-      String errorMessage;
-      switch (e.code) {
-        case 'weak-password':
-          errorMessage =
-              'The password is too weak. Please choose a stronger one.';
-          break;
-        case 'email-already-in-use':
-          errorMessage = 'An account already exists with this email address.';
-          break;
-        case 'invalid-email':
-          errorMessage = 'The email address is not valid.';
-          break;
-        default:
-          errorMessage = 'An unknown error occurred. Please try again later.';
-      }
-      var materialBanner = MaterialBanner(
-        elevation: 0,
-        backgroundColor: Colors.transparent,
-        content: AwesomeSnackbarContent(
-          title: 'Oh Snap!',
-          message: errorMessage,
-          contentType: ContentType.failure,
-          inMaterialBanner: true,
-        ),
-        actions: const [SizedBox.shrink()],
-      );
-      ScaffoldMessenger.of(context)
-        ..hideCurrentMaterialBanner()
-        ..showMaterialBanner(materialBanner);
-
-      Future.delayed(const Duration(seconds: 3), () {
-        ScaffoldMessenger.of(context).hideCurrentMaterialBanner();
-      });
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -143,6 +62,7 @@ class _SignupSectionState extends State<SignupSection> {
                     TextFormField(
                       autovalidateMode: AutovalidateMode.onUserInteraction,
                       controller: emailController,
+                      keyboardType: TextInputType.emailAddress,
                       decoration: InputDecoration(
                         labelText: 'Email',
                         labelStyle: const TextStyle(color: Color(0xff1a1a1a)),
@@ -220,27 +140,10 @@ class _SignupSectionState extends State<SignupSection> {
                     ElevatedButton(
                       onPressed: () {
                         if (_formKey.currentState?.validate() ?? false) {
-                          signUserUp();
+                          signUserUp(email: emailController.text, password: passwordController.text, confirmPassword: confirmPasswordController.text, context: context);
+                          
                         } else {
-                          var materialBanner = const MaterialBanner(
-                            elevation: 0,
-                            backgroundColor: Colors.transparent,
-                            content: AwesomeSnackbarContent(
-                              title: 'Oh Snap!',
-                              message: "Please fix the errors",
-                              contentType: ContentType.failure,
-                              inMaterialBanner: true,
-                            ),
-                            actions: [SizedBox.shrink()],
-                          );
-                          ScaffoldMessenger.of(context)
-                            ..hideCurrentMaterialBanner()
-                            ..showMaterialBanner(materialBanner);
-
-                          Future.delayed(const Duration(seconds: 3), () {
-                            ScaffoldMessenger.of(context)
-                                .hideCurrentMaterialBanner();
-                          });
+                          showErrorMessage(context: context, message: "Please review the form and correct any highlighted errors.", typecolor: AnimatedSnackBarType.error, duration: Durations.short4);
                         }
                       },
                       style: ElevatedButton.styleFrom(

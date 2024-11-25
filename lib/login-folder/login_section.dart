@@ -1,10 +1,9 @@
-import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
+import 'package:animated_snack_bar/animated_snack_bar.dart';
+import 'package:finals/auth-user/auth_section.dart';
 import 'package:finals/signup-folder/signup_scaffold.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:finals/switch-tab-folde/global_function.dart';
 import 'package:flutter/material.dart';
-
 import '../forget-password-folder/forgot_password_scaffold.dart';
-import '../switch-tab-folde/global_function.dart';
 
 class LoginSection extends StatefulWidget {
   const LoginSection({super.key});
@@ -17,52 +16,7 @@ class _LoginSectionState extends State<LoginSection> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
 
-  final _formKey =
-      GlobalKey<FormState>(); // Use only one form key for validation
-
-  void signUserIn() async {
-    try {
-      //put loading
-      await FirebaseAuth.instance.signInWithEmailAndPassword(
-        email: _emailController.text,
-        password: _passwordController.text,
-      );
-    } on FirebaseAuthException catch (e) {
-      String errorMessage;
-
-      switch (e.code) {
-        case 'user-not-found':
-          errorMessage = 'No user found for that email.';
-          break;
-        case 'wrong-password':
-          errorMessage = 'Incorrect password.';
-          break;
-        default:
-          errorMessage = 'An unknown error occurred. Please try again later.';
-      }
-
-      final materialBanner = MaterialBanner(
-        elevation: 0,
-        backgroundColor: Colors.transparent,
-        content: AwesomeSnackbarContent(
-          title: 'Oh Snap!',
-          message: errorMessage,
-          contentType: ContentType.failure,
-          inMaterialBanner: true,
-        ),
-        actions: const [SizedBox.shrink()],
-      );
-
-      ScaffoldMessenger.of(context)
-        ..hideCurrentMaterialBanner()
-        ..showMaterialBanner(materialBanner);
-
-      // Automatically hide the banner after 2 seconds
-      Future.delayed(const Duration(seconds: 2), () {
-        ScaffoldMessenger.of(context).hideCurrentMaterialBanner();
-      });
-    }
-  }
+  final _formKey = GlobalKey<FormState>();
 
   @override
   void dispose() {
@@ -185,31 +139,29 @@ class _LoginSectionState extends State<LoginSection> {
                         ElevatedButton(
                           onPressed: () {
                             if (_formKey.currentState?.validate() ?? false) {
-                              signUserIn();
+
+                              signUserIn(
+                                  email: _emailController.text,
+                                  password: _passwordController.text,
+                                  context: context);
+                              AnimatedSnackBar.rectangle(
+                                'Successfully Logging in',
+                                "Hello Welcome ${_emailController.text}",
+                                type: AnimatedSnackBarType.success,
+                                brightness: Brightness.dark,
+                                animationDuration: Durations.short1,
+                              ).show(context);
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          const AuthSection()));
                             } else {
-                              // Define the MaterialBanner to show if validation fails
-                              var materialBanner = const MaterialBanner(
-                                elevation: 0,
-                                backgroundColor: Colors.transparent,
-                                content: AwesomeSnackbarContent(
-                                  title: 'Oh Snap!',
-                                  message: "Please fix the errors",
-                                  contentType: ContentType.failure,
-                                  inMaterialBanner: true,
-                                ),
-                                actions: [SizedBox.shrink()], // No close button
-                              );
-
-                              // Show the banner
-                              ScaffoldMessenger.of(context)
-                                ..hideCurrentMaterialBanner() // Hide any existing banner first
-                                ..showMaterialBanner(materialBanner);
-
-                              // Automatically hide the banner after 2 seconds
-                              Future.delayed(const Duration(seconds: 3), () {
-                                ScaffoldMessenger.of(context)
-                                    .hideCurrentMaterialBanner();
-                              });
+                              showErrorMessage(
+                                  context: context,
+                                  message: "Please review the form and correct any highlighted errors.",
+                                  typecolor: AnimatedSnackBarType.error,
+                                  duration: Durations.short4);
                             }
                           },
                           style: ElevatedButton.styleFrom(

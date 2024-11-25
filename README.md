@@ -43,3 +43,37 @@ samples, guidance on mobile development, and a full API reference.
             slide left and pop up container or dialog to edit the slide app
         # delete
             slide right to delete the item in inventory 
+
+Todo 
+# sign-in
+    [add loading before login] x
+    [enchance the code readbility] x
+    [connected in fire base] o
+# forget password
+    [add functionality for the send otp]
+    [connected in fire base] x
+# sign up
+    [connected in fire base] o
+    [enchance the code readability] x
+    [add message the account is already created] x
+    [add security only valid email and request email verification] x
+# dashboard
+    []
+
+
+# pos
+    [categories] x
+    [app bar] x
+    [cart] x
+    [search] x
+    [] 
+# settings
+    [logout] o
+    [display the mail] o
+    [...] x
+
+# inventory
+    [the design in canva] x
+
+
+target change the snackbar and create the continue with google thanks and filter the textformfield and keyboard type
