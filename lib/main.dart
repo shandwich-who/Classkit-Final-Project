@@ -1,6 +1,5 @@
 import 'package:finals/auth-user/auth_scaffold.dart';
 import 'package:finals/firebase_options.dart';
-import 'package:finals/login-folder/login_scaffold.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
