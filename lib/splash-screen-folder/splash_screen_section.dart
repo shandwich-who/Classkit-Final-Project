@@ -1,7 +1,8 @@
 // import 'package:animated_splash_screen/animated_splash_screen.dart';
-import 'package:finals/login-folder/login_scaffold.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+
+import '../auth-user/auth_scaffold.dart';
 // import 'package:lottie/lottie.dart';
 
 // class SplashScreenSection extends StatelessWidget {
@@ -11,7 +12,7 @@ import 'package:flutter/services.dart';
 //   Widget build(BuildContext context) {
 //     return AnimatedSplashScreen(
 //       splash: Center(
-        
+
 //         child: Lottie.asset('assets/animation/one.json'),
 //       ),
 //       splashIconSize: 180,
@@ -22,7 +23,6 @@ import 'package:flutter/services.dart';
 //     );
 //   }
 // }
-
 
 class SplashScreenSection extends StatefulWidget {
   const SplashScreenSection({super.key});
@@ -40,7 +40,7 @@ class _SplashScreenSectionState extends State<SplashScreenSection>
 
     Future.delayed(const Duration(seconds: 3), () {
       Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (context) => const LoginScaffold()));
+          MaterialPageRoute(builder: (context) => const AuthScaffold()));
     });
   }
 

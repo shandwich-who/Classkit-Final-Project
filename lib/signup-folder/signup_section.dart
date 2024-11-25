@@ -2,7 +2,10 @@
 import 'package:animated_snack_bar/animated_snack_bar.dart';
 import 'package:finals/login-folder/login_scaffold.dart';
 import 'package:finals/switch-tab-folde/global_function.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+
+import '../auth-user/auth_section.dart';
 
 class SignupSection extends StatefulWidget {
   const SignupSection({super.key});
@@ -14,20 +17,47 @@ class SignupSection extends StatefulWidget {
 class _SignupSectionState extends State<SignupSection> {
   final _formKey = GlobalKey<FormState>();
 
-  final TextEditingController emailController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
-  final TextEditingController confirmPasswordController =
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _confirmPasswordController =
       TextEditingController();
 
   String? _validatorConfirmPassword(String? value) {
     if (value == null || value.isEmpty) {
       return 'Confirm Password is required';
-    } else if (value != passwordController.text) {
+    } else if (value != _passwordController.text) {
       return 'Passwords do not match';
     }
     return null;
   }
 
+  Future<void> _signUserUp() async {
+    try {
+      await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: _emailController.text,
+        password: _passwordController.text,
+      );
+
+      if (mounted) {
+        showMessage(
+          context: context,
+          message: "Successfully Created an Account",
+          duration: const Duration(milliseconds: 1500),
+          typeColor: AnimatedSnackBarType.success,
+        );
+      }
+    } on FirebaseAuthException catch (e) {
+      String message = e.code.toString();
+      if (mounted) {
+        showMessage(
+          context: context,
+          message: "$message!",
+          duration: const Duration(milliseconds: 1500),
+          typeColor: AnimatedSnackBarType.error,
+        );
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -61,7 +91,7 @@ class _SignupSectionState extends State<SignupSection> {
                     const SizedBox(height: 20),
                     TextFormField(
                       autovalidateMode: AutovalidateMode.onUserInteraction,
-                      controller: emailController,
+                      controller: _emailController,
                       keyboardType: TextInputType.emailAddress,
                       decoration: InputDecoration(
                         labelText: 'Email',
@@ -87,7 +117,7 @@ class _SignupSectionState extends State<SignupSection> {
                     const SizedBox(height: 25),
                     TextFormField(
                       autovalidateMode: AutovalidateMode.onUserInteraction,
-                      controller: passwordController,
+                      controller: _passwordController,
                       obscureText: true,
                       decoration: InputDecoration(
                         labelText: 'Password',
@@ -113,7 +143,7 @@ class _SignupSectionState extends State<SignupSection> {
                     const SizedBox(height: 25),
                     TextFormField(
                       autovalidateMode: AutovalidateMode.onUserInteraction,
-                      controller: confirmPasswordController,
+                      controller: _confirmPasswordController,
                       obscureText: true,
                       decoration: InputDecoration(
                         labelText: 'Confirm Password',
@@ -140,10 +170,21 @@ class _SignupSectionState extends State<SignupSection> {
                     ElevatedButton(
                       onPressed: () {
                         if (_formKey.currentState?.validate() ?? false) {
-                          signUserUp(email: emailController.text, password: passwordController.text, confirmPassword: confirmPasswordController.text, context: context);
-                          
+                          _signUserUp;
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const AuthSection()));
                         } else {
-                          showErrorMessage(context: context, message: "Please review the form and correct any highlighted errors.", typecolor: AnimatedSnackBarType.error, duration: Durations.short4);
+                          if (mounted) {
+                            showMessage(
+                              context: context,
+                              message:
+                                  "Hmm, something's not quite right. Please check your login details and try again.",
+                              duration: const Duration(milliseconds: 1500),
+                              typeColor: AnimatedSnackBarType.error,
+                            );
+                          }
                         }
                       },
                       style: ElevatedButton.styleFrom(
