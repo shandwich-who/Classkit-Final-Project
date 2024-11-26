@@ -1,275 +1,252 @@
 import 'package:flutter/material.dart';
-
 class InventorySection extends StatefulWidget {
   const InventorySection({super.key});
-
   @override
   State<InventorySection> createState() => _InventorySectionState();
 }
-
 class _InventorySectionState extends State<InventorySection> {
-  List<Map<String, dynamic>> tableData = [
-    {"prdId": "001", "prdName": "Coke", "price": 20.00, "quantity": 10},
-    {"prdId": "002", "prdName": "Pepsi", "price": 15.00, "quantity": 10}
-  ];
-
-  // Controllers for adding new rows
-  final TextEditingController prdIdController = TextEditingController();
-  final TextEditingController prdNameController = TextEditingController();
-  final TextEditingController prcController = TextEditingController();
-  final TextEditingController qtyController = TextEditingController();
-
-  void _addRow() {
-    setState(() {
-      tableData.add({
-        "prdId": prdIdController.text,
-        "prdName": prdNameController.text,
-        "price": double.tryParse(prcController.text) ?? 0.0,
-        "quantity": int.tryParse(qtyController.text) ?? 0,
-      });
-    });
-
-    // Clear the input fields
-    prdIdController.clear();
-    prdNameController.clear();
-    prcController.clear();
-    qtyController.clear();
-  }
-
   @override
   Widget build(BuildContext context) {
+    return CustomScrollView(
+      slivers: [
+        const SliverAppBar(
+          // expandedHeight: 100,
+          pinned: false,
+          centerTitle: true,
+          flexibleSpace: FlexibleSpaceBar(
+            centerTitle: true,
+            title: Text("Inventory"),
+          ),
+        ),
+        SliverSafeArea(
+          sliver: SliverList(
+              delegate: SliverChildBuilderDelegate(
+            (context, index) {
+              return ListItem(
+                id: '00$index',
+                name: 'Item $index',
+                price: 10.0 + index,
+                quantity: 100 - index,
+                imageUrl:
+                    'https://example.com/image_$index.jpg', 
+                onEdit: () => showEditForm(context, '00$index'),
+                onDelete: () {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('Deleted item 00$index')),
+                  );
+                },
+              );
+            },
+            childCount: 10, // Replace with your dynamic list count
+          )),
+        ),
+      ],
+    );
+  }
+}
+void showEditForm(BuildContext context, String itemId) {
+  showModalBottomSheet(
+    context: context,
+    isScrollControlled: true,
+    builder: (BuildContext context) {
+      return Padding(
+        padding:
+            EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+        child: EditForm(itemId: itemId),
+      );
+    },
+  );
+}
+class ListItem extends StatelessWidget {
+  final String id;
+  final String name;
+  final double price;
+  final int quantity;
+  final String imageUrl;
+  final VoidCallback onEdit;
+  final VoidCallback onDelete;
+  const ListItem({
+    super.key,
+    required this.id,
+    required this.name,
+    required this.price,
+    required this.quantity,
+    required this.imageUrl,
+    required this.onEdit,
+    required this.onDelete,
+  });
+  @override
+  Widget build(BuildContext context) {
+    return Dismissible(
+      key: ValueKey(id),
+      background: Container(
+        color: Colors.blue,
+        alignment: Alignment.centerLeft,
+        padding: const EdgeInsets.symmetric(horizontal: 20),
+        child: const Icon(Icons.edit, color: Colors.white),
+      ),
+      secondaryBackground: Container(
+        color: Colors.red,
+        alignment: Alignment.centerRight,
+        padding: const EdgeInsets.symmetric(horizontal: 20),
+        child: const Icon(Icons.delete, color: Colors.white),
+      ),
+      onDismissed: (direction) {
+        if (direction == DismissDirection.startToEnd) {
+          onEdit();
+        } else if (direction == DismissDirection.endToStart) {
+          onDelete();
+        }
+      },
+      child: Card(
+        margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+        child: ListTile(
+          leading: const CircleAvatar(
+              // backgroundImage: AssetImage('assets/images/item_$index.png'), 
+              ),
+          title: Text('$id: $name'),
+          subtitle:
+              Text('Price: \$${price.toStringAsFixed(2)}, Quantity: $quantity'),
+          trailing: const Icon(Icons.more_vert),
+        ),
+      ),
+    );
+  }
+}
+// Edit Form Modal Bottom Sheet
+class EditForm extends StatelessWidget {
+  final String itemId;
+  const EditForm({super.key, required this.itemId});
+  @override
+  Widget build(BuildContext context) {
+    final TextEditingController nameController =
+        TextEditingController(text: 'Item Name');
+    final TextEditingController priceController =
+        TextEditingController(text: '10.0');
+    final TextEditingController quantityController =
+        TextEditingController(text: '100');
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
         children: [
-          Table(
-            border: TableBorder.all(),
-            columnWidths: const {
-              0: FlexColumnWidth(2), // Product ID column
-              1: FlexColumnWidth(3), // Product Name column
-              2: FlexColumnWidth(2), // Price column
-              3: FlexColumnWidth(2), // Quantity column
-            },
-            children: [
-              TableRow(
-                decoration: BoxDecoration(color: Colors.grey[300]),
-                children: const [
-                  Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: Text(
-                      "Product ID",
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: Text(
-                      "Product Name",
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: Text(
-                      "Price",
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: Text(
-                      "Quantity",
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                ],
-              ),
-            ],
+          Text('Edit Item $itemId',
+              style: Theme.of(context).textTheme.titleLarge),
+          const SizedBox(height: 16),
+          TextField(
+            controller: nameController,
+            decoration: const InputDecoration(labelText: 'Name'),
           ),
-          Expanded(
-            child: ListView.builder(
-              itemCount: tableData.length,
-              itemBuilder: (context, index) {
-                final row = tableData[index];
-                return Table(
-                  border: TableBorder.all(),
-                  columnWidths: const {
-                    0: FlexColumnWidth(2),
-                    1: FlexColumnWidth(3),
-                    2: FlexColumnWidth(2),
-                    3: FlexColumnWidth(2),
-                  },
-                  children: [
-                    TableRow(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text(row["prdId"] ?? ""),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text(row["prdName"] ?? ""),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text(row["price"].toString()),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text(row["quantity"].toString()),
-                        ),
-                      ],
-                    ),
-                  ],
-                );
-              },
-            ),
+          TextField(
+            controller: priceController,
+            keyboardType: TextInputType.number,
+            decoration: const InputDecoration(labelText: 'Price'),
           ),
+          TextField(
+            controller: quantityController,
+            keyboardType: TextInputType.number,
+            decoration: const InputDecoration(labelText: 'Quantity'),
+          ),
+          const SizedBox(height: 16),
           Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Expanded(
-                child: TextField(
-                  controller: prdIdController,
-                  decoration: const InputDecoration(labelText: "Product ID"),
-                ),
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: const Text('Cancel'),
               ),
-              const SizedBox(width: 10),
-              Expanded(
-                child: TextField(
-                  controller: prdNameController,
-                  decoration: const InputDecoration(labelText: "Product Name"),
-                ),
-              ),
-              const SizedBox(width: 10),
-              Expanded(
-                child: TextField(
-                  controller: prcController,
-                  decoration: const InputDecoration(labelText: "Price"),
-                  keyboardType: TextInputType.number,
-                ),
-              ),
-              const SizedBox(width: 10),
-              Expanded(
-                child: TextField(
-                  controller: qtyController,
-                  decoration: const InputDecoration(labelText: "Quantity"),
-                  keyboardType: TextInputType.number,
-                ),
-              ),
-              const SizedBox(width: 10),
               ElevatedButton(
-                onPressed: _addRow,
-                child: const Text("Add"),
+                onPressed: () {
+                  // Handle save logic
+                  Navigator.pop(context);
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('Item $itemId updated!')),
+                  );
+                },
+                child: const Text('Save'),
               ),
             ],
           ),
-          const SizedBox(height: 20),
         ],
       ),
     );
   }
 }
-// //* this is for the app bar
-// class InventoryAppBar extends StatefulWidget implements PreferredSizeWidget {
-//   const InventoryAppBar({super.key});
 
-//   @override
-//   State<InventoryAppBar> createState() => _InventoryAppBarState();
-
-//   @override
-//   // TODO: implement preferredSize
-//   Size get preferredSize => const Size.fromHeight(kToolbarHeight);
-// }
-
-// class _InventoryAppBarState extends State<InventoryAppBar> {
-//   @override
-//   Widget build(BuildContext context) {
-//     return AppBar(
-//       title: const Text(
-//         "Inventory",
-//         style: TextStyle(color: Colors.blueAccent),
-//       ),
-//       centerTitle: true,
-//       backgroundColor: const Color(0xffFFB38E),
-//     );
-//   }
-// }
-
-// //* this is for the body
-// class InventorySection extends StatefulWidget {
-//   const InventorySection({super.key});
-//
-//   @override
-//   State<InventorySection> createState() => _InventorySectionState();
-// }
-//
-// class _InventorySectionState extends State<InventorySection> {
-//   final List<String> items = [
-//     "item 1",
-//     "item 2",
-//     "item 1",
-//     "item 2",
-//     "item 1",
-//     "item 2",
-//     "item 1",
-//     "item 2"
-//   ];
-//   @override
-//   Widget build(BuildContext context) {
-//     return CustomScrollView(
+// CustomScrollView(
 //       slivers: [
-//         // SliverAppBar for collapsing effect
-//         SliverAppBar(
-//           // expandedHeight: 200.0,
-//           pinned: false,
+//         const SliverAppBar(
+//           pinned: true,
 //           flexibleSpace: FlexibleSpaceBar(
-//             title: const Text('Sliver Card List'),
-//             // background: Image.network(
-//             //   'https://source.unsplash.com/random/800x600',
-//             //   fit: BoxFit.cover,
-//             // ),
+//             title: Text("Inventory"),
+//             centerTitle: true,
 //           ),
+//           backgroundColor: Colors.black,
 //         ),
-//
-//         // SliverList for the card items
-//         SliverList(
-//           delegate: SliverChildBuilderDelegate(
-//             (BuildContext context, int index) {
-//               return Padding(
-//                 padding:
-//                     const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-//                 child: Card(
-//                   elevation: 4,
-//                   shape: RoundedRectangleBorder(
-//                     borderRadius: BorderRadius.circular(12),
-//                   ),
-//                   child: ListTile(
-//                     leading: CircleAvatar(
-//                       backgroundColor: Colors.blueAccent,
-//                       child: Text(items[index][0]),
+//         SliverSafeArea(
+//           sliver: SliverToBoxAdapter(
+//             child: Padding(
+//               padding: const EdgeInsets.only(
+//                   top: 20, left: 20, right: 20, bottom: 20),
+//               child: Container(
+//                 decoration: BoxDecoration(
+//                     color: Colors.white,
+//                     borderRadius: BorderRadius.circular(10)),
+//                 child: Column(
+//                   mainAxisAlignment: MainAxisAlignment.center,
+//                   children: [
+//                     Container(
+//                       padding: const EdgeInsets.all(12),
+//                       decoration: BoxDecoration(
+//                         border: Border.all(color: Colors.black),
+//                         borderRadius: BorderRadius.circular(20),
+//                       ),
+//                       child: Row(
+//                         mainAxisAlignment: MainAxisAlignment.start,
+//                         children: [
+//                           Container(
+//                             padding: const EdgeInsets.all(10),
+//                             decoration: BoxDecoration(
+//                               shape: BoxShape.circle,
+//                               border: Border.all(
+//                                   color: Colors.black,
+//                                   style: BorderStyle.solid,
+//                                   width: 2),
+//                             ),
+//                             child: Image.asset(
+//                               "images/eraser.png",
+//                               height: 50,
+//                               width: 50,
+//                             ),
+//                           ),
+//                           const Column(
+//                             children: [
+//                               Row(
+//                                 mainAxisAlignment: MainAxisAlignment.center,
+//                                 children: [
+//                                   Text("Id: 001"),
+//                                 ],
+//                               ),
+//                               SizedBox(
+//                                 height: 10,
+//                               ),
+//                               Row(
+//                                 mainAxisAlignment: MainAxisAlignment.start,
+//                                 children: [
+//                                   Text("Name: Eraser"),
+//                                 ],
+//                               ),
+//                             ],
+//                           ),
+//                         ],
+//                       ),
 //                     ),
-//                     title: Text(items[index]),
-//                     subtitle: const Text('This is a subtitle'),
-//                     trailing: const Icon(Icons.arrow_forward_ios),
-//                     onTap: () {
-//                       // Action on card tap
-//                       ScaffoldMessenger.of(context).showSnackBar(
-//                         SnackBar(content: Text('Tapped on ${items[index]}')),
-//                       );
-//                     },
-//                   ),
+//                     //next 
+//                   ],
 //                 ),
-//               );
-//             },
-//             childCount: items.length, // Number of items in the list
+//               ),
+//             ),
 //           ),
 //         ),
 //       ],
 //     );
-//   }
-// }

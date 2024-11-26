@@ -7,7 +7,6 @@ class PosAppBarSection extends StatefulWidget implements PreferredSizeWidget {
   State<PosAppBarSection> createState() => _PosAppBarSectionState();
 
   @override
-  // TODO: implement preferredSize
   Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 }
 
@@ -15,10 +14,10 @@ class _PosAppBarSectionState extends State<PosAppBarSection> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.all(16.0),
+      padding: const EdgeInsets.all(16.0),
       child: Column(
         children: [
-          Center(
+          const Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -43,7 +42,7 @@ class _PosAppBarSectionState extends State<PosAppBarSection> {
               ],
             ),
           ),
-          SizedBox(height: 32.0),
+          const SizedBox(height: 32.0),
           Expanded(
             child: GridView.count(
               crossAxisCount: 2, // Two widgets per row
@@ -102,7 +101,7 @@ class SupplyWidget extends StatelessWidget {
   final Color backgroundColor;
   final Color textColor;
 
-  SupplyWidget({
+  const SupplyWidget({super.key, 
     required this.icon,
     required this.label,
     required this.backgroundColor,
@@ -120,7 +119,7 @@ class SupplyWidget extends StatelessWidget {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(8.0),
         ),
-        padding: EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16.0),
       ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -130,7 +129,7 @@ class SupplyWidget extends StatelessWidget {
             size: 48.0, // Larger icon
             color: textColor,
           ),
-          SizedBox(height: 12.0),
+          const SizedBox(height: 12.0),
           Text(
             label,
             style: TextStyle(

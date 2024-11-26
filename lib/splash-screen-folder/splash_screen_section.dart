@@ -2,7 +2,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import '../auth-user/auth_scaffold.dart';
+import '../auth-folder/auth_scaffold.dart';
+
 // import 'package:lottie/lottie.dart';
 
 // class SplashScreenSection extends StatelessWidget {
@@ -39,7 +40,7 @@ class _SplashScreenSectionState extends State<SplashScreenSection>
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive);
 
     Future.delayed(const Duration(seconds: 3), () {
-      Navigator.of(context).pushReplacement(
+      Navigator.push((context),
           MaterialPageRoute(builder: (context) => const AuthScaffold()));
     });
   }
