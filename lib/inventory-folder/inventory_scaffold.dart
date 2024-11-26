@@ -19,12 +19,15 @@ class InventoryScaffold extends StatelessWidget {
       home: Scaffold(
         backgroundColor: Colors.white,
         resizeToAvoidBottomInset: true,
-        // appBar: InventoryAppBar(),
-        appBar: AppBar(
-          centerTitle: true,
-          title: const Text("Inventory"),
-        ), //temporary
+
         body: const InventorySection(),
+        floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          // Action for the floating button
+          print("Add new item clicked");
+        },
+        child: const Icon(Icons.add),
+      ),
       ),
       theme: ThemeData(useMaterial3: false),
     );

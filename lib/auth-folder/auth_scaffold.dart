@@ -1,5 +1,6 @@
-import 'package:finals/auth-user/auth_section.dart';
 import 'package:flutter/material.dart';
+
+import 'auth_section.dart';
 
 class AuthScaffold extends StatelessWidget {
   const AuthScaffold({super.key});

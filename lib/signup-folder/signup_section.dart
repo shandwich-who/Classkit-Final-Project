@@ -1,11 +1,10 @@
-// import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:animated_snack_bar/animated_snack_bar.dart';
 import 'package:finals/login-folder/login_scaffold.dart';
 import 'package:finals/switch-tab-folde/global_function.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-import '../auth-user/auth_section.dart';
+import '../auth-folder/auth_section.dart';
 
 class SignupSection extends StatefulWidget {
   const SignupSection({super.key});

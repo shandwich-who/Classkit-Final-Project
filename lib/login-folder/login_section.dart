@@ -1,10 +1,10 @@
 import 'package:animated_snack_bar/animated_snack_bar.dart';
-import 'package:finals/auth-user/auth_section.dart';
 import 'package:finals/signup-folder/signup_scaffold.dart';
 import 'package:finals/switch-tab-folde/global_function.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
+import '../auth-folder/auth_section.dart';
 import '../forget-password-folder/forgot_password_scaffold.dart';
 
 class LoginSection extends StatefulWidget {

@@ -4,6 +4,8 @@ import 'package:finals/switch-tab-folde/global_function.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
+import '../auth-folder/auth_scaffold.dart';
+
 class ForgotPasswordSection extends StatefulWidget {
   const ForgotPasswordSection({super.key});
 
@@ -121,6 +123,10 @@ class _ForgotPasswordSectionState extends State<ForgotPasswordSection> {
                       onPressed: () {
                         if (_formKey.currentState?.validate() ?? false) {
                           _resetUserPassword;
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const AuthScaffold()));
                         } else {
                           if (mounted) {
                             showMessage(
