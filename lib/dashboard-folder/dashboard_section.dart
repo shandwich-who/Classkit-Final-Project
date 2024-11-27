@@ -1,8 +1,6 @@
-
-import 'package:finals/switch-tab-folde/global_function.dart';
+import 'package:finals/dashboard-folder/dashboard_function.dart';
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
-
 
 class DashboardSection extends StatefulWidget {
   const DashboardSection({super.key});

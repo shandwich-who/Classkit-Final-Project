@@ -1,21 +1,6 @@
-import 'package:animated_snack_bar/animated_snack_bar.dart';
-import 'package:finals/inventory-folder/inventory_scaffold.dart';
-import 'package:finals/pos-folder/pos_scaffold.dart';
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../search-folder/search_scaffold.dart';
-
-class BnbController extends GetxController {
-  RxInt index = 0.obs;
-  var pages = [
-    const PosScaffold(),
-    const SearchScaffold(),
-    const InventoryScaffold()
-  ];
-}
-
-BnbController controlNavBar = Get.put(BnbController());
+import '../signup-folder/signup_controller.dart';
 
 String? validateEmail(String? value) {
   if (value == null || value.isEmpty) {
@@ -71,32 +56,13 @@ String? validatePassword(String? value) {
   return null;
 }
 
-void showMessage(
-    {required BuildContext context,
-    String? message,
-    AnimatedSnackBarType? typeColor,
-    Duration? duration}) {
-  AnimatedSnackBar.material(
-    message!,
-    type: typeColor!,
-    borderRadius: BorderRadius.circular(16),
-    animationDuration: duration!,
-  ).show(context);
-}
+final passTheController = Get.put(SignUpController());
 
-// class UserController {
-//   static Future<User?> loginWithGoogle() async {
-//     final googleAccount = await GoogleSignIn().signIn();
-//
-//     final googleAuth = await googleAccount?.authentication;
-//
-//     final credential = GoogleAuthProvider.credential(
-//         accessToken: googleAuth?.accessToken, idToken: googleAuth?.idToken);
-//
-//     final userCredential = await FirebaseAuth.instance.signInWithCredential(
-//       credential,
-//     );
-//
-//     return userCredential.user;
-//   }
-// }
+String? validatorConfirmPassword(String? value) {
+  if (value == null || value.isEmpty) {
+    return 'Confirm Password is required';
+  } else if (value != passTheController.password) {
+    return 'Passwords do not match';
+  }
+  return null;
+}

@@ -1,5 +1,6 @@
 import 'package:finals/firebase_options.dart';
 import 'package:finals/inventory-folder/inventory_scaffold.dart';
+import 'package:finals/signup-folder/signup_scaffold.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 void main() async {
@@ -11,10 +12,10 @@ void main() async {
       // const AuthScaffold()
       //const LoginScaffold()
       // const SplashScreenScaffold()
-      // const SignupScaffold()
+      const SignupScaffold()
       // const ForgotPasswordScaffold()
       // const DashboardScaffold()
-      const InventoryScaffold()
+      // const InventoryScaffold()
       );
 }
 
