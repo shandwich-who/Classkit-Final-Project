@@ -1,7 +1,8 @@
 import 'package:animated_snack_bar/animated_snack_bar.dart';
-import 'package:finals/switch-tab-folde/global_function.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+
+import '../show-message-folder/show_message.dart';
 
 class SearchSection extends StatefulWidget {
   const SearchSection({super.key});
