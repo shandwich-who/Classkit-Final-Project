@@ -1,12 +1,13 @@
 import 'package:animated_snack_bar/animated_snack_bar.dart';
+import 'package:finals/auth-folder/auth_section.dart';
+import 'package:finals/forget-password-folder/forgot_password_scaffold.dart';
+import 'package:finals/show-message-folder/show_message.dart';
 import 'package:finals/signup-folder/signup_scaffold.dart';
+import 'package:finals/text-form-field-validator-folder/validator_section.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-import '../auth-folder/auth_section.dart';
-import '../forget-password-folder/forgot_password_scaffold.dart';
-import '../show-message-folder/show_message.dart';
-import '../text-form-field-validator-folder/validator_section.dart';
+
 
 class LoginSection extends StatefulWidget {
   const LoginSection({super.key});

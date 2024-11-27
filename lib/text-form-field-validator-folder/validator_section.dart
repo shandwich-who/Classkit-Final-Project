@@ -1,6 +1,3 @@
-import 'package:get/get.dart';
-
-import '../signup-folder/signup_controller.dart';
 
 String? validateEmail(String? value) {
   if (value == null || value.isEmpty) {
@@ -56,13 +53,4 @@ String? validatePassword(String? value) {
   return null;
 }
 
-final passTheController = Get.put(SignUpController());
 
-String? validatorConfirmPassword(String? value) {
-  if (value == null || value.isEmpty) {
-    return 'Confirm Password is required';
-  } else if (value != passTheController.password) {
-    return 'Passwords do not match';
-  }
-  return null;
-}

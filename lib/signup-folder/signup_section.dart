@@ -1,10 +1,11 @@
+import 'package:animated_snack_bar/animated_snack_bar.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:finals/auth-folder/auth_section.dart';
 import 'package:finals/login-folder/login_scaffold.dart';
-import 'package:finals/network-manager-folder/network_manager.dart';
-import 'package:finals/signup-folder/signup_controller.dart';
+import 'package:finals/show-message-folder/show_message.dart';
+import 'package:finals/text-form-field-validator-folder/validator_section.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-
-import '../text-form-field-validator-folder/validator_section.dart';
 
 class SignupSection extends StatefulWidget {
   const SignupSection({super.key});
@@ -14,40 +15,78 @@ class SignupSection extends StatefulWidget {
 }
 
 class _SignupSectionState extends State<SignupSection> {
-  // final _formKey = GlobalKey<FormState>();
-  //
-  // final TextEditingController _emailController = TextEditingController();
-  // final TextEditingController _passwordController = TextEditingController();
-  // final TextEditingController _confirmPasswordController =
-  // TextEditingController();
-  //
-  // Future<void> _signUserUp() async {
-  //   try {
-  //     await FirebaseAuth.instance.createUserWithEmailAndPassword(
-  //       email: _emailController.text,
-  //       password: _passwordController.text,
-  //     );
-  //
-  //     if (mounted) {
-  //       showMessage(
-  //         context: context,
-  //         message: "Successfully Created an Account",
-  //         duration: const Duration(milliseconds: 1500),
-  //         typeColor: AnimatedSnackBarType.success,
-  //       );
-  //     }
-  //   } on FirebaseAuthException catch (e) {
-  //     String message = e.code.toString();
-  //     if (mounted) {
-  //       showMessage(
-  //         context: context,
-  //         message: "$message!",
-  //         duration: const Duration(milliseconds: 1500),
-  //         typeColor: AnimatedSnackBarType.error,
-  //       );
-  //     }
-  //   }
-  // }
+  final _formKey = GlobalKey<FormState>();
+
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _confirmPasswordController =
+      TextEditingController();
+
+  String? validatorConfirmPassword(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Confirm Password is required';
+    } else if (value != _passwordController.text) {
+      return 'Passwords do not match';
+    }
+    return null;
+  }
+
+  Future<void> _signUserUp() async {
+    showDialog(
+        context: context,
+        builder: (context) => const Center(child: CircularProgressIndicator()));
+
+    Future<void> _showMessage(String message, AnimatedSnackBarType type) async {
+      if (mounted) {
+        showMessage(
+          context: context,
+          message: message,
+          duration: const Duration(milliseconds: 1500),
+          typeColor: type,
+        );
+        Navigator.pop(context);
+      }
+    }
+
+    try {
+      var connectivityResult = await Connectivity().checkConnectivity();
+      if (connectivityResult == ConnectivityResult.none) {
+        await _showMessage(
+            "No internet connection. Please check your connection.",
+            AnimatedSnackBarType.error);
+        return;
+      }
+
+      if (_formKey.currentState?.validate() ?? false) {
+        try {
+          await FirebaseAuth.instance.createUserWithEmailAndPassword(
+            email: _emailController.text,
+            password: _confirmPasswordController.text,
+          );
+
+          await _showMessage(
+              "Successfully Created an Account", AnimatedSnackBarType.success);
+          if (mounted){
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const AuthSection()),
+            );
+          }
+        } on FirebaseAuthException catch (e) {
+          String message = e.code.toString();
+          await _showMessage(message, AnimatedSnackBarType.error);
+        }
+      } else {
+        await _showMessage(
+          "There was an error creating your account. Please try again later.",
+          AnimatedSnackBarType.error,
+        );
+      }
+    } catch (e) {
+      await _showMessage(
+          'An error occurred. Please try again.', AnimatedSnackBarType.error);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -64,7 +103,7 @@ class _SignupSectionState extends State<SignupSection> {
             child: Container(
               padding: const EdgeInsets.all(20.0),
               child: Form(
-                key: passTheController.signUpForm,
+                key: _formKey,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -81,7 +120,7 @@ class _SignupSectionState extends State<SignupSection> {
                     const SizedBox(height: 20),
                     TextFormField(
                       autovalidateMode: AutovalidateMode.onUserInteraction,
-                      controller: passTheController.email,
+                      controller: _emailController,
                       keyboardType: TextInputType.emailAddress,
                       decoration: InputDecoration(
                         labelText: 'Email',
@@ -107,7 +146,7 @@ class _SignupSectionState extends State<SignupSection> {
                     const SizedBox(height: 25),
                     TextFormField(
                       autovalidateMode: AutovalidateMode.onUserInteraction,
-                      controller: passTheController.password,
+                      controller: _passwordController,
                       obscureText: true,
                       decoration: InputDecoration(
                         labelText: 'Password',
@@ -133,7 +172,7 @@ class _SignupSectionState extends State<SignupSection> {
                     const SizedBox(height: 25),
                     TextFormField(
                       autovalidateMode: AutovalidateMode.onUserInteraction,
-                      controller: passTheController.confirmPassword,
+                      controller: _confirmPasswordController,
                       obscureText: true,
                       decoration: InputDecoration(
                         labelText: 'Confirm Password',
@@ -159,8 +198,7 @@ class _SignupSectionState extends State<SignupSection> {
                     const SizedBox(height: 50),
                     ElevatedButton(
                       onPressed: () {
-                        Get.put(NetworkManager());
-                        SignUpController.instance.signUserUp();
+                        _signUserUp();
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xff77abb6),
