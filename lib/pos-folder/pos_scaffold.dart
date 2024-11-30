@@ -1,4 +1,4 @@
-import 'package:finals/pos-folder/pos_app_bar_section.dart';
+import 'package:finals/pos-folder/pos_section.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -17,9 +17,7 @@ class PosScaffold extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       home: const Scaffold(
         resizeToAvoidBottomInset: true,
-        // appBar: PosAppBarSection(),
-        // body: Center(child: Text("Point of Sale (Empty)")),
-        body: PosAppBarSection(),
+        body: PosSection(),
       ),
       theme: ThemeData(useMaterial3: false),
     );

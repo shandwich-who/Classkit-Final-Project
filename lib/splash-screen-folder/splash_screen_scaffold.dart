@@ -21,7 +21,7 @@ class _SplashScreenScaffoldState extends State<SplashScreenScaffold> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: const Scaffold(
-        
+
         backgroundColor: Colors.white,
         body: SplashScreenSection(),
       ),

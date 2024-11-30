@@ -1,8 +1,74 @@
 import 'package:flutter/material.dart';
+
 class InventorySection extends StatefulWidget {
   const InventorySection({super.key});
+
+
+  static List<Item> inventoryItems = [
+    Item(
+      id: '001',
+      name: 'Pencil',
+      price: 10,
+      quantity: 100,
+      imageAsset: 'images/pencil.png',
+    ),
+    Item(
+      id: '002',
+      name: 'Eraser',
+      price: 5,
+      quantity: 100,
+      imageAsset: 'images/eraser.png',
+    ),
+    Item(
+      id: '001',
+      name: 'Pencil',
+      price: 10,
+      quantity: 100,
+      imageAsset: 'images/pencil.png',
+    ),
+    Item(
+      id: '002',
+      name: 'Eraser',
+      price: 5,
+      quantity: 100,
+      imageAsset: 'images/eraser.png',
+    ),
+    Item(
+      id: '001',
+      name: 'Pencil',
+      price: 10,
+      quantity: 100,
+      imageAsset: 'images/pencil.png',
+    ),
+    Item(
+      id: '002',
+      name: 'Eraser',
+      price: 5,
+      quantity: 100,
+      imageAsset: 'images/eraser.png',
+    ),
+    Item(
+      id: '001',
+      name: 'Pencil',
+      price: 10,
+      quantity: 100,
+      imageAsset: 'images/pencil.png',
+    ),
+    Item(
+      id: '002',
+      name: 'Eraser',
+      price: 5,
+      quantity: 100,
+      imageAsset: 'images/eraser.png',
+    ),
+  ];
+  
+  get items => inventoryItems;
+
   @override
   State<InventorySection> createState() => _InventorySectionState();
+
+
 }
 class _InventorySectionState extends State<InventorySection> {
   @override
@@ -10,40 +76,46 @@ class _InventorySectionState extends State<InventorySection> {
     return CustomScrollView(
       slivers: [
         const SliverAppBar(
-          // expandedHeight: 100,
           pinned: false,
           centerTitle: true,
+          backgroundColor: Colors.indigo,
+          
           flexibleSpace: FlexibleSpaceBar(
             centerTitle: true,
-            title: Text("Inventory"),
+            title: Text("List of the Items"),
           ),
         ),
         SliverSafeArea(
           sliver: SliverList(
-              delegate: SliverChildBuilderDelegate(
-            (context, index) {
-              return ListItem(
-                id: '00$index',
-                name: 'Item $index',
-                price: 10.0 + index,
-                quantity: 100 - index,
-                imageUrl:
-                    'https://example.com/image_$index.jpg', 
-                onEdit: () => showEditForm(context, '00$index'),
-                onDelete: () {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('Deleted item 00$index')),
-                  );
-                },
-              );
-            },
-            childCount: 10, // Replace with your dynamic list count
-          )),
+            delegate: SliverChildBuilderDelegate(
+              (context, index) {
+                final item = widget.items[index];
+                return ListItem(
+                  id: item.id,
+                  name: item.name,
+                  price: item.price,
+                  quantity: item.quantity,
+                  imageAsset: item.imageAsset,
+                  onEdit: () => showEditForm(context, item.id),
+                  onDelete: () {
+                    setState(() {
+                      widget.items.removeAt(index);
+                    });
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('Deleted item ${item.id}')),
+                    );
+                  },
+                );
+              },
+              childCount: widget.items.length,
+            ),
+          ),
         ),
       ],
     );
   }
 }
+
 void showEditForm(BuildContext context, String itemId) {
   showModalBottomSheet(
     context: context,
@@ -57,24 +129,27 @@ void showEditForm(BuildContext context, String itemId) {
     },
   );
 }
+
 class ListItem extends StatelessWidget {
   final String id;
   final String name;
   final double price;
   final int quantity;
-  final String imageUrl;
+  final String imageAsset;
   final VoidCallback onEdit;
   final VoidCallback onDelete;
+
   const ListItem({
     super.key,
     required this.id,
     required this.name,
     required this.price,
     required this.quantity,
-    required this.imageUrl,
+    required this.imageAsset,
     required this.onEdit,
     required this.onDelete,
   });
+
   @override
   Widget build(BuildContext context) {
     return Dismissible(
@@ -91,40 +166,83 @@ class ListItem extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 20),
         child: const Icon(Icons.delete, color: Colors.white),
       ),
-      onDismissed: (direction) {
+      confirmDismiss: (direction) async {
         if (direction == DismissDirection.startToEnd) {
+          // Left to right: Trigger edit but prevent dismissal
           onEdit();
+          return false; // Do not dismiss the item
         } else if (direction == DismissDirection.endToStart) {
-          onDelete();
+          // Right to left: Confirm delete
+          final shouldDelete = await _confirmDelete(context);
+          if (shouldDelete) {
+            onDelete();
+          }
+          return shouldDelete; // Dismiss only if confirmed
         }
+        return false; // Default: do not dismiss
       },
       child: Card(
         margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
         child: ListTile(
-          leading: const CircleAvatar(
-              // backgroundImage: AssetImage('assets/images/item_$index.png'), 
-              ),
+          leading: Container(
+          decoration: BoxDecoration(
+            border: Border.all(color: Colors.black,),
+            shape: BoxShape.circle,
+          image: DecorationImage(
+            image: Image.asset(imageAsset).image,
+            filterQuality: FilterQuality.medium,
+            alignment: Alignment.center,
+            fit: BoxFit.cover,
+          ),
+          ),
+          width:50,
+          height: 50,
+          ),
           title: Text('$id: $name'),
           subtitle:
-              Text('Price: \$${price.toStringAsFixed(2)}, Quantity: $quantity'),
+              Text('Price: ₱${price.toStringAsFixed(2)}, Quantity: $quantity'),
           trailing: const Icon(Icons.more_vert),
         ),
       ),
     );
   }
+
+  Future<bool> _confirmDelete(BuildContext context) async {
+    return await showDialog<bool>(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: const Text('Confirm Delete'),
+            content: Text('Are you sure you want to delete "$name"?'),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(false),
+                child: const Text('Cancel'),
+              ),
+              ElevatedButton(
+                onPressed: () => Navigator.of(context).pop(true),
+                child: const Text('Delete'),
+              ),
+            ],
+          ),
+        ) ??
+        false; // Default to false if the dialog is dismissed
+  }
 }
-// Edit Form Modal Bottom Sheet
+
 class EditForm extends StatelessWidget {
   final String itemId;
+
   const EditForm({super.key, required this.itemId});
+
   @override
   Widget build(BuildContext context) {
     final TextEditingController nameController =
-        TextEditingController(text: 'Item Name');
+        TextEditingController();
     final TextEditingController priceController =
-        TextEditingController(text: '10.0');
+        TextEditingController();
     final TextEditingController quantityController =
-        TextEditingController(text: '100');
+        TextEditingController();
+
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: Column(
@@ -173,80 +291,19 @@ class EditForm extends StatelessWidget {
   }
 }
 
-// CustomScrollView(
-//       slivers: [
-//         const SliverAppBar(
-//           pinned: true,
-//           flexibleSpace: FlexibleSpaceBar(
-//             title: Text("Inventory"),
-//             centerTitle: true,
-//           ),
-//           backgroundColor: Colors.black,
-//         ),
-//         SliverSafeArea(
-//           sliver: SliverToBoxAdapter(
-//             child: Padding(
-//               padding: const EdgeInsets.only(
-//                   top: 20, left: 20, right: 20, bottom: 20),
-//               child: Container(
-//                 decoration: BoxDecoration(
-//                     color: Colors.white,
-//                     borderRadius: BorderRadius.circular(10)),
-//                 child: Column(
-//                   mainAxisAlignment: MainAxisAlignment.center,
-//                   children: [
-//                     Container(
-//                       padding: const EdgeInsets.all(12),
-//                       decoration: BoxDecoration(
-//                         border: Border.all(color: Colors.black),
-//                         borderRadius: BorderRadius.circular(20),
-//                       ),
-//                       child: Row(
-//                         mainAxisAlignment: MainAxisAlignment.start,
-//                         children: [
-//                           Container(
-//                             padding: const EdgeInsets.all(10),
-//                             decoration: BoxDecoration(
-//                               shape: BoxShape.circle,
-//                               border: Border.all(
-//                                   color: Colors.black,
-//                                   style: BorderStyle.solid,
-//                                   width: 2),
-//                             ),
-//                             child: Image.asset(
-//                               "images/eraser.png",
-//                               height: 50,
-//                               width: 50,
-//                             ),
-//                           ),
-//                           const Column(
-//                             children: [
-//                               Row(
-//                                 mainAxisAlignment: MainAxisAlignment.center,
-//                                 children: [
-//                                   Text("Id: 001"),
-//                                 ],
-//                               ),
-//                               SizedBox(
-//                                 height: 10,
-//                               ),
-//                               Row(
-//                                 mainAxisAlignment: MainAxisAlignment.start,
-//                                 children: [
-//                                   Text("Name: Eraser"),
-//                                 ],
-//                               ),
-//                             ],
-//                           ),
-//                         ],
-//                       ),
-//                     ),
-//                     //next 
-//                   ],
-//                 ),
-//               ),
-//             ),
-//           ),
-//         ),
-//       ],
-//     );
+class Item {
+  final String id;
+  final String name;
+  final double price;
+  final int quantity;
+  final String imageAsset;
+
+  Item({
+    required this.id,
+    required this.name,
+    required this.price,
+    required this.quantity,
+    required this.imageAsset,
+  });
+}
+
