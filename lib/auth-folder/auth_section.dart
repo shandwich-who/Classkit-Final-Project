@@ -1,4 +1,4 @@
-import 'package:finals/dashboard-folder/dashboard_scaffold.dart';
+import 'package:finals/dashboard-folder/dashboard.dart';
 import 'package:finals/login-folder/login_scaffold.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';

@@ -1,13 +1,13 @@
+import 'dart:async';
 import 'package:animated_snack_bar/animated_snack_bar.dart';
-import 'package:finals/auth-folder/auth_section.dart';
-import 'package:finals/forget-password-folder/forgot_password_scaffold.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:finals/show-message-folder/show_message.dart';
-import 'package:finals/signup-folder/signup_scaffold.dart';
 import 'package:finals/text-form-field-validator-folder/validator_section.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
-
-
+import 'package:flutter/services.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class LoginSection extends StatefulWidget {
   const LoginSection({super.key});
@@ -19,33 +19,118 @@ class LoginSection extends StatefulWidget {
 class _LoginSectionState extends State<LoginSection> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
-
   final _formKey = GlobalKey<FormState>();
 
   Future<void> _signUserIn() async {
     try {
-      await FirebaseAuth.instance.signInWithEmailAndPassword(
-        email: _emailController.text,
-        password: _passwordController.text,
-      );
-
+      final List<ConnectivityResult> connectivityResult =
+          await (Connectivity().checkConnectivity());
+      if (connectivityResult.contains(ConnectivityResult.none)) {
+        if (mounted) {
+          showMessage(
+            context: context,
+            message: "No internet connection. Please check your connection.",
+            duration: Duration(milliseconds: 1500),
+            typeColor: AnimatedSnackBarType.error,
+          );
+        }
+      } else if (connectivityResult.contains(ConnectivityResult.mobile) ||
+          connectivityResult.contains(ConnectivityResult.wifi)) {
+        if (_formKey.currentState!.validate()) {
+          try {
+            await FirebaseAuth.instance.signInWithEmailAndPassword(
+              email: _emailController.text.trim(),
+              password: _passwordController.text.trim(),
+            ); //next fix the sign up remove the prompt that sucessfully login and go to the login itselft if the account are created and add validity and the forget password after forgot got to the login to sign up
+          } on FirebaseAuthException catch (e) {
+            if (mounted) {
+              showMessage(
+                context: context,
+                message: e.code.toString(),
+                duration: Duration(milliseconds: 1500),
+                typeColor: AnimatedSnackBarType.error,
+              );
+            }
+          }
+        } else {
+          if (mounted) {
+            showMessage(
+              context: context,
+              message: "Kindly resolve the issue to continue logging in.",
+              duration: Duration(milliseconds: 1500),
+              typeColor: AnimatedSnackBarType.error,
+            );
+          }
+        }
+      }
+    } on PlatformException catch (e) {
       if (mounted) {
         showMessage(
           context: context,
-          message: "Successfully Login",
-          duration: const Duration(milliseconds: 1500),
-          typeColor: AnimatedSnackBarType.success,
+          message: e.code.toString(),
+          duration: Duration(milliseconds: 1500),
+          typeColor: AnimatedSnackBarType.error,
         );
       }
-    } on FirebaseAuthException catch (e) {
-      String message = e.code.toString();
+    }
+  }
 
-      // Check if the widget is still mounted before showing the message
+  Future<User?> _googleSignIn() async {
+    final googleAccount = await GoogleSignIn().signIn();
+    if (googleAccount == null) return null;
+    final googleAuth = await googleAccount.authentication;
+    final credential = GoogleAuthProvider.credential(
+      accessToken: googleAuth.accessToken,
+      idToken: googleAuth.idToken,
+    );
+    final userCredential =
+        await FirebaseAuth.instance.signInWithCredential(credential);
+    return userCredential.user;
+  }
+
+  Future<void> _handleGoogleSignIn() async {
+    try {
+      final List<ConnectivityResult> connectivityResult =
+          await (Connectivity().checkConnectivity());
+      if (connectivityResult.contains(ConnectivityResult.none)) {
+        if (mounted) {
+          showMessage(
+            context: context,
+            message: "No internet connection. Please check your connection.",
+            duration: Duration(milliseconds: 1500),
+            typeColor: AnimatedSnackBarType.error,
+          );
+        }
+      } else if (connectivityResult.contains(ConnectivityResult.mobile) ||
+          connectivityResult.contains(ConnectivityResult.wifi)) {
+        try {
+          final User? user = await _googleSignIn();
+          if (user != null) {
+            if (!mounted) return;
+          
+          }
+          else{
+            return;
+          }
+          
+          // FluroRouterSetup.router.navigateTo(context, '/rtAuthAnimate',);
+        } on FirebaseAuthException catch (e) {
+          if (mounted) {
+            showMessage(
+              context: context,
+              message: e.code,
+              duration: Duration(milliseconds: 1500),
+              typeColor: AnimatedSnackBarType.error,
+            );
+          }
+        }
+      }
+    } on PlatformException catch (e) {
       if (mounted) {
         showMessage(
           context: context,
-          message: message,
-          duration: const Duration(milliseconds: 1500),
+          message: e.code,
+          duration: Duration(milliseconds: 1500),
           typeColor: AnimatedSnackBarType.error,
         );
       }
@@ -54,6 +139,8 @@ class _LoginSectionState extends State<LoginSection> {
 
   @override
   void dispose() {
+    // Clean up the controller when the widget is disposed.
+    _formKey.currentState?.dispose();
     _emailController.dispose();
     _passwordController.dispose();
     super.dispose();
@@ -119,7 +206,7 @@ class _LoginSectionState extends State<LoginSection> {
                         ),
                         const SizedBox(height: 25),
                         TextFormField(
-                          keyboardType: TextInputType.visiblePassword,
+                          // keyboardType: TextInputType.visiblePassword,
                           autovalidateMode: AutovalidateMode.onUserInteraction,
                           validator: validatePassword,
                           controller: _passwordController,
@@ -151,11 +238,32 @@ class _LoginSectionState extends State<LoginSection> {
                           children: [
                             TextButton(
                               onPressed: () {
-                                Navigator.push(
+                                FluroRouterSetup.router.navigateTo(
                                   context,
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          const ForgotPasswordScaffold()),
+                                  '/forgotScaffold',
+                                  transition: TransitionType.custom,
+                                  transitionDuration:
+                                      Duration(milliseconds: 800),
+                                  transitionBuilder: (context, animation,
+                                      secondaryAnimation, child) {
+                                    return AnimatedBuilder(
+                                      animation: animation,
+                                      builder: (context, child) {
+                                        final opacity = Curves.easeIn
+                                            .transform(animation.value);
+                                        final scale = Curves.easeInOut
+                                            .transform(animation.value);
+                                        return Opacity(
+                                          opacity: opacity,
+                                          child: Transform.scale(
+                                            scale: scale,
+                                            child: child,
+                                          ),
+                                        );
+                                      },
+                                      child: child,
+                                    );
+                                  },
                                 );
                               },
                               child: const Text(
@@ -172,23 +280,7 @@ class _LoginSectionState extends State<LoginSection> {
                         const SizedBox(height: 10),
                         ElevatedButton(
                           onPressed: () {
-                            if (_formKey.currentState?.validate() ?? false) {
-                              _signUserIn;
-
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          const AuthSection()));
-                            } else {
-                              showMessage(
-                                context: context,
-                                message:
-                                    "Hmm, something's not quite right. Please check your login details and try again.",
-                                duration: const Duration(milliseconds: 1500),
-                                typeColor: AnimatedSnackBarType.error,
-                              );
-                            }
+                            _signUserIn();
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: const Color(0xff4da674),
@@ -228,26 +320,7 @@ class _LoginSectionState extends State<LoginSection> {
                   const SizedBox(height: 20),
                   ElevatedButton(
                     onPressed: () async {
-                      // try {
-                      //   final user = await UserController.loginWithGoogle();
-                      //   if (user != null) {
-                      //     if (mounted) {
-                      //       Navigator.of(context).push(MaterialPageRoute(
-                      //         builder: (context) => const AuthSection(),
-                      //       ));
-                      //     }
-                      //   }
-                      // } on FirebaseAuthException catch (e) {
-                      //   String mess = e.code;
-                      //   if (mounted) {
-                      //     showMessage(
-                      //       context: context,
-                      //       message: mess,
-                      //       duration: const Duration(milliseconds: 1500),
-                      //       typeColor: AnimatedSnackBarType.error,
-                      //     );
-                      //   }
-                      // }
+                      _handleGoogleSignIn();
                     },
                     style: ElevatedButton.styleFrom(
                       foregroundColor: const Color(0xff1a1a1a),
@@ -281,16 +354,37 @@ class _LoginSectionState extends State<LoginSection> {
                         style: TextStyle(
                           color: Color(0xff1a1a1a),
                           fontFamily: "Poppins",
-                          fontSize: 11,
+                          fontSize: 12,
                         ),
                       ),
                       const SizedBox(width: 4),
                       GestureDetector(
                         onTap: () {
-                          Navigator.push(
+                          FluroRouterSetup.router.navigateTo(
                             context,
-                            MaterialPageRoute(
-                                builder: (context) => const SignupScaffold()),
+                            '/signUpScaffold',
+                            transition: TransitionType.custom,
+                            transitionDuration: Duration(milliseconds: 800),
+                            transitionBuilder: (context, animation,
+                                secondaryAnimation, child) {
+                              return AnimatedBuilder(
+                                animation: animation,
+                                builder: (context, child) {
+                                  final opacity =
+                                      Curves.easeIn.transform(animation.value);
+                                  final scale = Curves.easeInOut
+                                      .transform(animation.value);
+                                  return Opacity(
+                                    opacity: opacity,
+                                    child: Transform.scale(
+                                      scale: scale,
+                                      child: child,
+                                    ),
+                                  );
+                                },
+                                child: child,
+                              );
+                            },
                           );
                         },
                         child: const Text(
@@ -298,7 +392,7 @@ class _LoginSectionState extends State<LoginSection> {
                           style: TextStyle(
                             color: Color(0xff000000),
                             fontWeight: FontWeight.bold,
-                            fontSize: 12,
+                            fontSize: 12.5,
                             fontFamily: "Poppins",
                           ),
                         ),

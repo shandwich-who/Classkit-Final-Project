@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 
-class PosAppBarSection extends StatefulWidget implements PreferredSizeWidget {
-  const PosAppBarSection({super.key});
+class PosSection extends StatefulWidget implements PreferredSizeWidget {
+  const PosSection({super.key});
 
   @override
-  State<PosAppBarSection> createState() => _PosAppBarSectionState();
+  State<PosSection> createState() => _PosSectionState();
 
   @override
   Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 }
 
-class _PosAppBarSectionState extends State<PosAppBarSection> {
+class _PosSectionState extends State<PosSection> {
   @override
   Widget build(BuildContext context) {
     return Padding(

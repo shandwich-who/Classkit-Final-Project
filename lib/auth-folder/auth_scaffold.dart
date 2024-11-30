@@ -15,6 +15,7 @@ class AuthScaffold extends StatelessWidget {
       home: const Scaffold(
         body: AuthSection(),
       ),
+      
     );
   }
 }

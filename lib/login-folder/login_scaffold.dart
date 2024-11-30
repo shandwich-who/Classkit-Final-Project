@@ -23,6 +23,8 @@ class LoginScaffold extends StatelessWidget {
         body: LoginSection(),
       ),
       theme: ThemeData(useMaterial3: false),
+      // onGenerateRoute: FluroRouterSetup.router.generator,
+
     );
   }
 }
