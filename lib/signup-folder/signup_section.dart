@@ -1,4 +1,5 @@
 import 'package:animated_snack_bar/animated_snack_bar.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:finals/show-message-folder/show_message.dart';
 import 'package:finals/text-form-field-validator-folder/validator_section.dart';
@@ -6,6 +7,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+
 
 class SignupSection extends StatefulWidget {
   const SignupSection({super.key});
@@ -21,6 +23,7 @@ class _SignupSectionState extends State<SignupSection> {
   final TextEditingController _confirmPasswordController =
       TextEditingController();
 
+
   String? _validatorConfirmPassword(String? value) {
     if (value == null || value.isEmpty) {
       return 'Confirm Password is required';
@@ -30,58 +33,79 @@ class _SignupSectionState extends State<SignupSection> {
     return null;
   }
 
-  Future<void> _signUserUp() async {
-    try {
-      final List<ConnectivityResult> connectivityResult =
+Future<void> _signUserUp() async {
+  try {
+    final List<ConnectivityResult> connectivityResult =
           await (Connectivity().checkConnectivity());
-      if (connectivityResult.contains(ConnectivityResult.none)) {
-        if (mounted) {
-          showMessage(
-            context: context,
-            message: "No internet connection. Please check your connection.",
-            duration: Duration(milliseconds: 1500),
-            typeColor: AnimatedSnackBarType.error,
+    if (connectivityResult.contains(ConnectivityResult.none)) {
+      if (mounted) {
+        showMessage(
+          context: context,
+          message: "No internet connection. Please check your connection.",
+          duration: Duration(milliseconds: 1500),
+          typeColor: AnimatedSnackBarType.error,
+        );
+      }
+    } else {
+      if (_formKey.currentState!.validate()) {
+        try {
+          UserCredential userCredential = await FirebaseAuth.instance
+              .createUserWithEmailAndPassword(
+            email: _emailController.text.trim(),
+            password: _passwordController.text.trim(),
           );
-        }
-      } else if (connectivityResult.contains(ConnectivityResult.mobile) ||
-          connectivityResult.contains(ConnectivityResult.wifi)) {
-        if (_formKey.currentState!.validate()) {
-          try {
-            await FirebaseAuth.instance.createUserWithEmailAndPassword(
-              email: _emailController.text.trim(),
-              password: _passwordController.text.trim(),
-            );
-            // stil does not have trasition  adn text sucessfully created an account
-          } on FirebaseAuthException catch (e) {
-            if (mounted) {
-              showMessage(
-                  context: context,
-                  duration: Duration(milliseconds: 1500),
-                  message: e.code.toString(),
-                  typeColor: AnimatedSnackBarType.error);
-            }
-          }
-        }else{
+
+          // Get the user's UID and email
+          String uid = userCredential.user!.uid;
+          String email = userCredential.user!.email!;
+
+          // Save to Firestore
+          await FirebaseFirestore.instance.collection('users').doc(uid).set({
+            'uid': uid,
+            'email': email,
+            'createdAt': FieldValue.serverTimestamp(),
+          });
+
           if (mounted) {
             showMessage(
               context: context,
-              message: "Kindly resolve the issue to continue creating an account.",
+              message: "Signup successful!",
+              duration: Duration(milliseconds: 1500),
+              typeColor: AnimatedSnackBarType.success,
+            );
+          }
+        } on FirebaseAuthException catch (e) {
+          if (mounted) {
+            showMessage(
+              context: context,
+              message: e.message ?? "An error occurred.",
               duration: Duration(milliseconds: 1500),
               typeColor: AnimatedSnackBarType.error,
             );
           }
         }
-      }
-    } on PlatformException catch (e) {
-      if (mounted) {
-        showMessage(
+      } else {
+        if (mounted) {
+          showMessage(
             context: context,
+            message:
+                "Kindly resolve the issue to continue creating an account.",
             duration: Duration(milliseconds: 1500),
-            message: e.code.toString(),
-            typeColor: AnimatedSnackBarType.error);
+            typeColor: AnimatedSnackBarType.error,
+          );
+        }
       }
     }
+  } on PlatformException catch (e) {
+    if (mounted) {
+      showMessage(
+          context: context,
+          duration: Duration(milliseconds: 1500),
+          message: e.code.toString(),
+          typeColor: AnimatedSnackBarType.error);
+    }
   }
+}
 
   @override
   void dispose() {
