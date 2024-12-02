@@ -60,10 +60,10 @@ class _SplashScreenSectionState extends State<SplashScreenSection>
                 width: 220,
               ),
               const SizedBox(height: 20), // Added SizedBox for spacing
-              const SpinKitSpinningLines(
-                color: Colors.black,
-                size: 60.0,
-              ) // Changed to SpinKitRing
+              SpinKitSquareCircle(
+                color: Colors.grey[900],
+                size: 50.0,
+              ),
             ],
           ),
         ),

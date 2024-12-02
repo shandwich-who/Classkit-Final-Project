@@ -1,8 +1,18 @@
-import 'dart:ffi';
+import 'dart:async';
 
+import 'package:animated_snack_bar/animated_snack_bar.dart';
+import 'package:finals/service-folder/firestore.dart';
+import 'package:finals/show-message-folder/show_message.dart';
+import 'package:finals/text-form-field-validator-folder/validator_section.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:pretty_animated_buttons/pretty_animated_buttons.dart';
+
+final TextEditingController _idController = TextEditingController();
+final TextEditingController _nameController = TextEditingController();
+final TextEditingController _priceController = TextEditingController();
+final TextEditingController _quantityController = TextEditingController();
+final _formKey = GlobalKey<FormState>();
 
 class FloatActButton extends StatefulWidget {
   const FloatActButton({super.key});
@@ -12,22 +22,12 @@ class FloatActButton extends StatefulWidget {
 }
 
 class _FloatActButtonState extends State<FloatActButton> {
-  void addNewTask() {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return const DialogBox();
-      },
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return FloatingActionButton(
       onPressed: () {
-        addNewTask();
+        showCustomDialog(context);
       },
-      // backgroundColor: Colors.green[700],
       backgroundColor: Colors.blue[900],
       child: Icon(
         Icons.add,
@@ -38,119 +38,196 @@ class _FloatActButtonState extends State<FloatActButton> {
   }
 }
 
-class DialogBox extends StatefulWidget {
-  const DialogBox({super.key});
-
-  @override
-  State<DialogBox> createState() => _DialogBoxState();
-}
-
-class _DialogBoxState extends State<DialogBox>
-    with SingleTickerProviderStateMixin {
+void showCustomDialog(BuildContext context) {
   Widget textFormField({
     required String? labelText,
     required TextInputType? keyboardType,
+    required TextEditingController txtController,
+    required String? Function(String?)? validator,
   }) {
     return Column(
       children: [
-        SizedBox(
-          height: 50,
-          child: TextFormField(
-            keyboardType: keyboardType!,
-            decoration: InputDecoration(
-              labelText: labelText!,
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10.0),
-              ),
+        TextFormField(
+          validator: validator,
+          autovalidateMode: AutovalidateMode.onUserInteraction,
+          controller: txtController,
+          keyboardType: keyboardType!,
+          decoration: InputDecoration(
+            labelText: labelText!,
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10.0),
             ),
           ),
         ),
-        SizedBox(height: 10),
       ],
     );
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return AlertDialog(
-      backgroundColor: Color(0xffe7ecef),
-      title: const Text(
-        "Add Items",
-        textAlign: TextAlign.center,
-      ),
-      content: Container(
-        decoration: BoxDecoration(borderRadius: BorderRadius.circular(20)),
-        height: 320,
-        width: 200,
-        child: Form(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              textFormField(
-                labelText: "Id",
-                keyboardType: TextInputType.number,
+  showDialog(
+    context: context,
+    barrierDismissible: false,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: Text(
+          "Add Item",
+          textAlign: TextAlign.center,
+        ),
+        titlePadding: EdgeInsets.fromLTRB(30, 30, 30, 15),
+        shadowColor: Colors.grey,
+        surfaceTintColor: Colors.yellow,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        content: SizedBox(
+          height: 300,
+          child: SingleChildScrollView(
+            child: Form(
+              key: _formKey,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  textFormField(
+                    validator: validateId,
+                    txtController: _idController,
+                    labelText: "Item ID",
+                    keyboardType: TextInputType.number,
+                  ),
+                  SizedBox(height: 20),
+                  textFormField(
+                    validator: validateName,
+                    txtController: _nameController,
+                    labelText: "Name",
+                    keyboardType: TextInputType.text,
+                  ),
+                  SizedBox(height: 20),
+                  textFormField(
+                    txtController: _priceController,
+                    validator: validatePrice,
+                    labelText: "Price",
+                    keyboardType: TextInputType.number,
+                  ),
+                  SizedBox(height: 20),
+                  textFormField(
+                    txtController: _quantityController,
+                    validator: validateQuantity,
+                    labelText: "Quantity",
+                    keyboardType: TextInputType.number,
+                  ),
+                  // SizedBox(height: 10),
+                  // NewButton(),
+                ],
               ),
-              textFormField(
-                labelText: "Name",
-                keyboardType: TextInputType.text,
-              ),
-              textFormField(
-                labelText: "Price",
-                keyboardType: TextInputType.number,
-              ),
-              textFormField(
-                labelText: "Quantity",
-                keyboardType: TextInputType.number,
-              ),
-              SizedBox(
-                height: 30,
-              ),
-              NewButton(vCallBack1: addFunc,vCallBack2:  cancelFumc,btn1: "Cancel",btn2: "Add",)
-            ],
+            ),
           ),
         ),
-      ),
-    );
-  }
+        actions: [
+          Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: NewButton(),
+          )
+        ],
+      );
+    },
+  );
 }
 
-void addFunc (){
+class NewButton extends StatefulWidget {
+  const NewButton({super.key});
 
+  @override
+  State<NewButton> createState() => _NewButtonState();
 }
-void cancelFumc(){
 
-}
-
-class NewButton extends StatelessWidget {
-  final String? btn1;
-  final String? btn2;
-  final VoidCallback? vCallBack1; 
-  final VoidCallback? vCallBack2; 
-
-  const NewButton({super.key, required this.vCallBack1, required this.vCallBack2, required this.btn1, this.btn2});
+class _NewButtonState extends State<NewButton> {
+  final FirestoreService _fireStoreService = FirestoreService();
+  User? user = FirebaseAuth.instance.currentUser;
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      child: Center(
-        child: Column(
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                PrettyNeumorphicButton(label: btn1!, onPressed: () => vCallBack1!,duration: Durations.short4,borderRadius: 12,padding: EdgeInsets.fromLTRB(20,15,20,15), labelStyle: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),),
-                PrettyNeumorphicButton(label: btn2!, onPressed: () => vCallBack2,duration: Durations.short4,borderRadius: 12,padding: EdgeInsets.fromLTRB(20,15,20,15), labelStyle: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),),
-              ],
-            ),
-          ],
-        ),
+    return Center(
+      child: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              PrettyNeumorphicButton(
+                label: "Cancel",
+                onPressed: () {
+                  Future.delayed(Duration(milliseconds: 500), () {
+                    try {
+                      _idController.clear();
+                      _nameController.clear();
+                      _priceController.clear();
+                      _quantityController.clear();
+
+                      Navigator.of(mounted ? context : context,
+                              rootNavigator: true)
+                          .pop();
+                    } catch (e) {
+                      showMessage(
+                          context: mounted ? context : context,
+                          duration: Duration(milliseconds: 1500),
+                          message: e.toString(),
+                          typeColor: AnimatedSnackBarType.error);
+                    }
+                  });
+                },
+                duration: Durations.medium1,
+                borderRadius: 12,
+                padding: EdgeInsets.fromLTRB(20, 15, 20, 15),
+                labelStyle:
+                    TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+              ),
+              PrettyNeumorphicButton(
+                label: "Add",
+                onPressed: () {
+                  Future.delayed(Duration(milliseconds: 500), () {
+                    try {
+                      if (_formKey.currentState!.validate()) {
+                        _fireStoreService.createData(
+                          int.parse(_idController.text),
+                          _nameController.text,
+                          double.parse(_priceController.text),
+                          int.parse(_quantityController.text),
+                        );
+                        showMessage(
+                            context: mounted ? context : context,
+                            duration: Duration(milliseconds: 1500),
+                            message: "Already Added",
+                            typeColor: AnimatedSnackBarType.success);
+
+                        _idController.clear();
+                        _nameController.clear();
+                        _priceController.clear();
+                        _quantityController.clear();
+                        Navigator.of(mounted ? context : context,
+                                rootNavigator: true)
+                            .pop();
+                      } else {
+                        showMessage(
+                            context: mounted ? context : context,
+                            duration: Duration(milliseconds: 1500),
+                            message:
+                                "There are some errors please fix it before proceeding",
+                            typeColor: AnimatedSnackBarType.error);
+                      }
+                    } catch (e) {
+                      showMessage(
+                          context: mounted ? context : context,
+                          duration: Duration(milliseconds: 1500),
+                          message: e.toString(),
+                          typeColor: AnimatedSnackBarType.error);
+                    }
+                  });
+                },
+                duration: Durations.short4,
+                borderRadius: 12,
+                padding: EdgeInsets.fromLTRB(20, 15, 20, 15),
+                labelStyle:
+                    TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }
 }
-
-
-
-
-
-

@@ -1,4 +1,3 @@
-
 String? validateEmail(String? value) {
   if (value == null || value.isEmpty) {
     return 'Email cannot be empty';
@@ -53,4 +52,48 @@ String? validatePassword(String? value) {
   return null;
 }
 
+String? validateId(String? value) {
+  if (value == null || value.isEmpty) {
+    return "ID is required";
+  }
+  if (!RegExp(r'^[0-9]+$').hasMatch(value)) {
+    return "ID must be numeric";
+  }
+  return null;
+}
 
+String? validateName(String? value) {
+  if (value == null || value.isEmpty) {
+    return "Name is required";
+  }
+  if (value.length < 3) {
+    return "Name must be at least 3 characters long";
+  }
+  return null;
+}
+
+String? validatePrice(String? value) {
+  if (value == null || value.isEmpty) {
+    return "Price is required";
+  }
+  if (double.tryParse(value) == null) {
+    return "Enter a valid price";
+  }
+  if (double.parse(value) <= 0) {
+    return "Price must be greater than 0";
+  }
+  return null;
+}
+
+String? validateQuantity(String? value) {
+  if (value == null || value.isEmpty) {
+    return "Quantity is required";
+  }
+  if (int.tryParse(value) == null) {
+    return "Enter a valid quantity";
+  }
+  if (int.parse(value) <= 0) {
+    return "Quantity must be greater than 0";
+  }
+  return null;
+}

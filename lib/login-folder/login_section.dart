@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:animated_snack_bar/animated_snack_bar.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:finals/show-message-folder/show_message.dart';
 import 'package:finals/text-form-field-validator-folder/validator_section.dart';
@@ -41,7 +42,7 @@ class _LoginSectionState extends State<LoginSection> {
             await FirebaseAuth.instance.signInWithEmailAndPassword(
               email: _emailController.text.trim(),
               password: _passwordController.text.trim(),
-            ); //next fix the sign up remove the prompt that sucessfully login and go to the login itselft if the account are created and add validity and the forget password after forgot got to the login to sign up
+            ); 
           } on FirebaseAuthException catch (e) {
             if (mounted) {
               showMessage(
@@ -75,67 +76,94 @@ class _LoginSectionState extends State<LoginSection> {
     }
   }
 
-  Future<User?> _googleSignIn() async {
+Future<User?> _googleSignIn() async {
+  try {
     final googleAccount = await GoogleSignIn().signIn();
     if (googleAccount == null) return null;
+
     final googleAuth = await googleAccount.authentication;
     final credential = GoogleAuthProvider.credential(
       accessToken: googleAuth.accessToken,
       idToken: googleAuth.idToken,
     );
+
     final userCredential =
         await FirebaseAuth.instance.signInWithCredential(credential);
     return userCredential.user;
+  } catch (e) {
+    showMessage(
+        context: mounted ? context : context,
+        message: "Google Sign In Error: $e",
+        duration: Duration(milliseconds: 1500),
+        typeColor: AnimatedSnackBarType.error,
+      );
+    return null;
   }
+}
 
-  Future<void> _handleGoogleSignIn() async {
-    try {
-      final List<ConnectivityResult> connectivityResult =
+Future<void> _handleGoogleSignIn(BuildContext context) async {
+  try {
+    final List<ConnectivityResult> connectivityResult =
           await (Connectivity().checkConnectivity());
-      if (connectivityResult.contains(ConnectivityResult.none)) {
-        if (mounted) {
-          showMessage(
-            context: context,
-            message: "No internet connection. Please check your connection.",
-            duration: Duration(milliseconds: 1500),
-            typeColor: AnimatedSnackBarType.error,
-          );
-        }
-      } else if (connectivityResult.contains(ConnectivityResult.mobile) ||
-          connectivityResult.contains(ConnectivityResult.wifi)) {
-        try {
-          final User? user = await _googleSignIn();
-          if (user != null) {
-            if (!mounted) return;
-          
-          }
-          else{
-            return;
-          }
-          
-          // FluroRouterSetup.router.navigateTo(context, '/rtAuthAnimate',);
-        } on FirebaseAuthException catch (e) {
-          if (mounted) {
-            showMessage(
-              context: context,
-              message: e.code,
-              duration: Duration(milliseconds: 1500),
-              typeColor: AnimatedSnackBarType.error,
-            );
-          }
-        }
-      }
-    } on PlatformException catch (e) {
-      if (mounted) {
-        showMessage(
-          context: context,
-          message: e.code,
-          duration: Duration(milliseconds: 1500),
-          typeColor: AnimatedSnackBarType.error,
-        );
-      }
+
+    if (connectivityResult.contains(ConnectivityResult.none)) {
+      showMessage(
+        context: mounted ? context : context,
+        message: "No internet connection. Please check your connection.",
+        duration: Duration(milliseconds: 1500),
+        typeColor: AnimatedSnackBarType.error,
+      );
+      return;
     }
+
+    final User? user = await _googleSignIn();
+    if (user != null) {
+      
+      await FirebaseFirestore.instance.collection('users').doc(user.uid).set({
+        'uid': user.uid,
+        'email': user.email ?? '',
+        'createdAt': FieldValue.serverTimestamp(),
+
+      }, SetOptions(merge: true));
+
+      // showMessage(
+      //   context: mounted ? context : context,
+      //   message: "Sucessfully save in firestore",
+      //   duration: Duration(milliseconds: 1500),
+      //   typeColor: AnimatedSnackBarType.success,
+      // );
+
+    } else {
+      showMessage(
+        context: mounted ? context : context,
+        message: "Google Sign-In Aborted",
+        duration: Duration(milliseconds: 1500),
+        typeColor: AnimatedSnackBarType.error,
+      );
+    }
+  } on FirebaseAuthException catch (e) {
+    showMessage(
+      context: mounted ? context : context,
+      message: "Authentication Error: ${e.code}",
+      duration: Duration(milliseconds: 1500),
+      typeColor: AnimatedSnackBarType.error,
+    );
+  } on PlatformException catch (e) {
+    showMessage(
+      context: mounted ? context : context,
+      message: "Error: ${e.code}",
+      duration: Duration(milliseconds: 1500),
+      typeColor: AnimatedSnackBarType.error,
+    );
+  } catch (e) {
+    showMessage(
+      context: mounted ? context : context,
+      message: "Unexpected Error: $e",
+      duration: Duration(milliseconds: 1500),
+      typeColor: AnimatedSnackBarType.error,
+    );
   }
+}
 
   @override
   void dispose() {
@@ -320,7 +348,7 @@ class _LoginSectionState extends State<LoginSection> {
                   const SizedBox(height: 20),
                   ElevatedButton(
                     onPressed: () async {
-                      _handleGoogleSignIn();
+                      _handleGoogleSignIn(context);
                     },
                     style: ElevatedButton.styleFrom(
                       foregroundColor: const Color(0xff1a1a1a),

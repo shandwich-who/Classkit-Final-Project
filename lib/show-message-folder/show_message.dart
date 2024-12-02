@@ -11,8 +11,7 @@ import 'package:finals/splash-screen-folder/splash_screen_scaffold.dart';
 import 'package:flutter/material.dart';
 import 'package:fluro/fluro.dart';
 
-void showMessage(
-    {required BuildContext? context,
+void showMessage({required BuildContext context,
     String? message,
     AnimatedSnackBarType? typeColor,
     Duration? duration}) {
@@ -21,7 +20,7 @@ void showMessage(
     type: typeColor!,
     borderRadius: BorderRadius.circular(16),
     animationDuration: duration!,
-  ).show(context!);
+  ).show(context);
 }
 
 class FluroRouterSetup {
