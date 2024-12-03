@@ -323,7 +323,6 @@ void showEditForm(
                           priceController.clear();
                           quantityController.clear();
                           Navigator.of(context).pop(false);
-                          Navigator.of(context, rootNavigator: true).pop();
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.grey[800],

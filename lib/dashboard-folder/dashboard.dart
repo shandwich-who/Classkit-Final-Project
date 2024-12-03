@@ -11,49 +11,44 @@ class DashboardScaffold extends StatefulWidget {
   State<DashboardScaffold> createState() => _DashboardScaffoldState();
 }
 class _DashboardScaffoldState extends State<DashboardScaffold> {
-// final List<Color> _tabColors = [
-  //   Colors.lightBlueAccent,
-  //   Colors.white,
-  //   Colors.orangeAccent,
-  // ];
-  // final List<Color> _activeColor = [Colors.white, Colors.black, Colors.white];
-  int _selectedIndex = 2;
+  int _selectedIndex = 0;
+  final PageController _pageController = PageController(initialPage: 0);
+
   final List<LinearGradient> _tabGradient = [
-    // Gradient for POS (Index 0)
     const LinearGradient(
       colors: [Color(0xffFF9A9E), Color(0xffFAD0C4)],
       begin: Alignment.topCenter,
       end: Alignment.bottomCenter,
     ),
-
-    // Gradient for Search (Index 1)
     const LinearGradient(
       colors: [Color(0xff89F7FE), Color(0xff66A6FF)],
       begin: Alignment.topLeft,
       end: Alignment.bottomRight,
     ),
-
-    // Gradient for Inventory (Index 2)
     const LinearGradient(
-      colors: [
-        Color(0xff7F7FD5),
-        // Color(0xff86A8E7),
-        Color(0xff91EAE4)
-      ], // Muted blues with subtle transitions for professionalism
+      colors: [Color(0xff7F7FD5), Color(0xff91EAE4)],
       begin: Alignment.topRight,
       end: Alignment.bottomLeft,
     ),
   ];
+
   final List<Widget> _pages = [
     const PosScaffold(),
     const SettingsScaffold(),
     const InventoryScaffold(),
   ];
+
   void _onTabChange(int index) {
     setState(() {
       _selectedIndex = index;
     });
+    _pageController.animateToPage(
+      index,
+      duration: const Duration(milliseconds: 500), 
+      curve: Curves.easeInOut,
+    );
   }
+
   @override
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(
@@ -61,11 +56,20 @@ class _DashboardScaffoldState extends State<DashboardScaffold> {
         systemNavigationBarColor: Colors.white,
       ),
     );
+
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
         resizeToAvoidBottomInset: true,
-        body: _pages[_selectedIndex],
+        body: PageView(
+          controller: _pageController,
+          onPageChanged: (index) {
+            setState(() {
+              _selectedIndex = index;
+            });
+          },
+          children: _pages,
+        ),
         bottomNavigationBar: SafeArea(
           child: Container(
             decoration: BoxDecoration(
@@ -92,7 +96,6 @@ class _DashboardScaffoldState extends State<DashboardScaffold> {
                 tabBorderRadius: 16,
                 gap: 8,
                 selectedIndex: _selectedIndex,
-
                 onTabChange: _onTabChange,
                 padding: const EdgeInsets.all(16),
                 tabs: const [

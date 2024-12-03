@@ -1,7 +1,7 @@
-import 'package:finals/auth-folder/auth_scaffold.dart';
+import 'package:finals/auth-folder/auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart'; // Add this import
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 class SplashScreenSection extends StatefulWidget {
   const SplashScreenSection({super.key});
@@ -12,13 +12,22 @@ class SplashScreenSection extends StatefulWidget {
 
 class _SplashScreenSectionState extends State<SplashScreenSection>
     with SingleTickerProviderStateMixin {
+  late final AnimationController _controller;
+  late final Animation<double> _fadeAnimation;
+
   @override
   void initState() {
     super.initState();
-    // Set immersive mode
+
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive);
 
-    // Navigate to AuthScaffold after a delay
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 2),
+    )..forward();
+
+    _fadeAnimation = CurvedAnimation(parent: _controller, curve: Curves.easeIn);
+
     Future.delayed(const Duration(milliseconds: 3000), () {
       if (mounted) {
         Navigator.pushReplacement(
@@ -31,6 +40,7 @@ class _SplashScreenSectionState extends State<SplashScreenSection>
 
   @override
   void dispose() {
+    _controller.dispose();
     SystemChrome.setEnabledSystemUIMode(
       SystemUiMode.manual,
       overlays: SystemUiOverlay.values,
@@ -40,6 +50,8 @@ class _SplashScreenSectionState extends State<SplashScreenSection>
 
   @override
   Widget build(BuildContext context) {
+    final double screenHeight = MediaQuery.of(context).size.height;
+
     return Scaffold(
       body: Center(
         child: Container(
@@ -54,15 +66,27 @@ class _SplashScreenSectionState extends State<SplashScreenSection>
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Image.asset(
-                "images/orig.png", // Ensure this image path is correct
-                height: 220,
-                width: 220,
+              FadeTransition(
+                opacity: _fadeAnimation,
+                child: Image.asset(
+                  "images/orig.png",
+                  height: screenHeight * 0.3,
+                  width: screenHeight * 0.3,
+                ),
               ),
-              const SizedBox(height: 20), // Added SizedBox for spacing
-              SpinKitSquareCircle(
-                color: Colors.grey[900],
+              const SizedBox(height: 20),
+              SpinKitPouringHourGlassRefined(
+                color: Color(0xff000000),
                 size: 50.0,
+              ),
+              const SizedBox(height: 20),
+              const Text(
+                "Loading, please wait...",
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
+                  color: Colors.black54,
+                ),
               ),
             ],
           ),
