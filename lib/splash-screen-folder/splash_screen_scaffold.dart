@@ -15,7 +15,7 @@ class _SplashScreenScaffoldState extends State<SplashScreenScaffold> {
     SystemChrome.setSystemUIOverlayStyle(
       const SystemUiOverlayStyle(
         systemNavigationBarColor: Colors.white,
-        // statusBarColor: Colors.transparent,
+        
       ),
     );
     return MaterialApp(
