@@ -4,10 +4,9 @@ import 'package:finals/service-folder/firestore.dart';
 import 'package:finals/show-message-folder/show_message.dart';
 import 'package:finals/text-form-field-validator-folder/validator_section.dart';
 import 'package:flutter/material.dart';
-import 'package:pretty_animated_buttons/widgets/pretty_neumorphic_button.dart';
 
 final _formKey = GlobalKey<FormState>();
-final FirestoreService _fireStoreService = FirestoreService();
+final FireStoreService _fireStoreService = FireStoreService();
 TextEditingController quantityController = TextEditingController();
 TextEditingController priceController = TextEditingController();
 TextEditingController nameController = TextEditingController();
@@ -84,6 +83,7 @@ class Item {
   final String name;
   final double price;
   final int quantity;
+
   // final String imageAsset;
 
   Item({
@@ -380,69 +380,3 @@ void showEditForm(
     },
   );
 }
-// class EditForm extends StatelessWidget {
-//   final String docId;
-//   final int itemId;
-//   final Map<String, dynamic> data;
-
-//   const EditForm(
-//       {super.key,
-//       required this.itemId,
-//       required this.data,
-//       required this.docId});
-
-//   @override
-//   Widget build(BuildContext context) {
-//     final TextEditingController nameController = TextEditingController(text: "${data['name']}");
-//     final TextEditingController priceController = TextEditingController(text: "${data['price']}");
-//     final TextEditingController quantityController = TextEditingController(text: "${data['quantity']}");
-//     final FirestoreService firestoreService = FirestoreService();
-
-//     return Padding(
-//       padding: const EdgeInsets.all(16.0),
-//       child: Column(
-//         mainAxisSize: MainAxisSize.min,
-//         children: [
-//           Text('Edit Item $itemId',
-//               style: Theme.of(context).textTheme.titleLarge),
-//           const SizedBox(height: 16),
-//           TextField(
-//             controller: nameController,
-//             decoration: const InputDecoration(labelText: "Name"),
-//           ),
-//           TextField(
-//             controller: priceController,
-//             keyboardType: TextInputType.number,
-//             decoration: const InputDecoration(labelText: 'Price'),
-//           ),
-//           TextField(
-//             controller: quantityController,
-//             keyboardType: TextInputType.number,
-//             decoration: const InputDecoration(labelText: 'Quantity'),
-//           ),
-//           const SizedBox(height: 16),
-//           Row(
-//             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//             children: [
-//               TextButton(
-//                 onPressed: () => Navigator.pop(context),
-//                 child: const Text('Cancel'),
-//               ),
-//               ElevatedButton(
-//                 onPressed: () {
-//                   // Handle save logic
-//                   Navigator.pop(context);
-//                   ScaffoldMessenger.of(context).showSnackBar(
-//                     SnackBar(content: Text('Item $itemId updated!')),
-//                   );
-//                 },
-//                 child: const Text('Save'),
-//               ),
-//             ],
-//           ),
-//         ],
-//       ),
-//     );
-//   }
-// }
-

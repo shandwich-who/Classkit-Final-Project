@@ -137,7 +137,7 @@ class NewButton extends StatefulWidget {
 }
 
 class _NewButtonState extends State<NewButton> {
-  final FirestoreService _fireStoreService = FirestoreService();
+  final FireStoreService _fireStoreService = FireStoreService();
   User? user = FirebaseAuth.instance.currentUser;
 
   @override
