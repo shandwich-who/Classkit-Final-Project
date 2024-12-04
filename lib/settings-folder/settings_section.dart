@@ -1,4 +1,5 @@
 import 'package:animated_snack_bar/animated_snack_bar.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:finals/show-message-folder/show_message.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -23,29 +24,52 @@ class _SettingsSectionState extends State<SettingsSection> {
     });
 
     try {
-      if (_user.providerData
-          .any((provider) => provider.providerId == 'google.com')) {
-        await GoogleSignIn().signOut();
-      }
-      await FirebaseAuth.instance.signOut();
+      final List<ConnectivityResult> connectivityResult =
+          await (Connectivity().checkConnectivity());
+      if (connectivityResult.contains(ConnectivityResult.none)) {
+        if (mounted) {
+          showMessage(
+            context: context,
+            message: "No internet connection. Please check your connection.",
+            duration: Duration(milliseconds: 1500),
+            typeColor: AnimatedSnackBarType.error,
+            
+          );
+        }
+        setState(() {
+          _isLoading = false;
+        });
+      } else {
+        try {
+          if (_user.providerData
+              .any((provider) => provider.providerId == 'google.com')) {
+            await GoogleSignIn().signOut();
+          }
+          await FirebaseAuth.instance.signOut();
 
-      if (mounted) {
-        showMessage(
-          context: context,
-          message: "Signed out successfully",
-          duration: const Duration(milliseconds: 1500),
-          typeColor: AnimatedSnackBarType.success,
-        );
-      }
-    } on FirebaseAuthException catch (e) {
-      String message = e.code.toString();
-      if (mounted) {
-        showMessage(
-          context: context,
-          message: message,
-          duration: const Duration(milliseconds: 1500),
-          typeColor: AnimatedSnackBarType.error,
-        );
+          if (mounted) {
+            showMessage(
+              context: context,
+              message: "Signed out successfully",
+              duration: const Duration(milliseconds: 1500),
+              typeColor: AnimatedSnackBarType.success,
+            );
+          }
+        } on FirebaseAuthException catch (e) {
+          String message = e.code.toString();
+          if (mounted) {
+            showMessage(
+              context: context,
+              message: message,
+              duration: const Duration(milliseconds: 1500),
+              typeColor: AnimatedSnackBarType.error,
+            );
+          }
+        } finally {
+          setState(() {
+            _isLoading = false;
+          });
+        }
       }
     } on PlatformException catch (e) {
       if (mounted) {
@@ -56,10 +80,6 @@ class _SettingsSectionState extends State<SettingsSection> {
           typeColor: AnimatedSnackBarType.error,
         );
       }
-    } finally {
-      setState(() {
-        _isLoading = false;
-      });
     }
   }
 

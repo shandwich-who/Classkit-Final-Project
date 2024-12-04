@@ -1,8 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-class FirestoreService {
+class FireStoreService {
   // final CollectionReference dataItems = FirebaseFirestore.instance.collection('iventory_items');
+  Future<void> addToCart(String name, double price, int quantity) {
+    final CollectionReference dataCart =
+        FirebaseFirestore.instance.collection('cart');
+
+    return dataCart.add({'name': name, 'price': price, 'quantity': quantity});
+  }
 
   Future<void> createData(int itemId, String name, double price, int quantity) {
     final CollectionReference dataItems = FirebaseFirestore.instance
