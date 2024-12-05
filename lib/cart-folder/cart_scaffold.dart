@@ -1,9 +1,9 @@
-import 'package:finals/login-folder/login_section.dart';
+import 'package:finals/cart-folder/cart_section.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-class LoginScaffold extends StatelessWidget {
-  const LoginScaffold({super.key});
+class CartScaffold extends StatelessWidget {
+  const CartScaffold({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -16,15 +16,13 @@ class LoginScaffold extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: const Scaffold(
-        // backgroundColor: Color(0xffeaf9e7),
-        backgroundColor: Color(0xffFAF9F6),
-        resizeToAvoidBottomInset:
-          true,
-        body: LoginSection(),
+        resizeToAvoidBottomInset: true,
+        body: CartSection(),
+        
+
       ),
       theme: ThemeData(useMaterial3: false),
-      // onGenerateRoute: FluroRouterSetup.router.generator,
-
     );
   }
 }
+

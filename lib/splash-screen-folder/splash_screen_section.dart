@@ -48,6 +48,60 @@ class _SplashScreenSectionState extends State<SplashScreenSection>
     super.dispose();
   }
 
+  // @override
+  // void initState() {
+  //   super.initState();
+
+  //   // Enable immersive mode (hides status and navigation bars)
+  //   SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive,
+  //       overlays: [SystemUiOverlay.top, SystemUiOverlay.bottom]);
+
+  //   // Change the status bar to white (light icons)
+  //   SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+  //     statusBarColor: Colors.white, // Set the status bar color to white
+  //     statusBarIconBrightness: Brightness
+  //         .dark, // Set icons to dark for visibility on white background
+  //     systemNavigationBarColor:
+  //         Colors.white, // Optional: Set navigation bar color to white
+  //     systemNavigationBarIconBrightness:
+  //         Brightness.dark, // Optional: Set icons to dark for the navigation bar
+  //   ));
+  //   _controller = AnimationController(
+  //     vsync: this,
+  //     duration: const Duration(seconds: 2),
+  //   )..forward();
+
+  //   _fadeAnimation = CurvedAnimation(parent: _controller, curve: Curves.easeIn);
+
+  //   Future.delayed(const Duration(milliseconds: 3000), () {
+  //     if (mounted) {
+  //       Navigator.pushReplacement(
+  //         context,
+  //         MaterialPageRoute(builder: (context) => const AuthScaffold()),
+  //       );
+  //     }
+  //   });
+  // }
+
+  // @override
+  // void dispose() {
+  //   // Reset to default system UI when no longer needed
+  //   SystemChrome.setEnabledSystemUIMode(
+  //       SystemUiMode.edgeToEdge); // Shows both status and navigation bars
+
+  //   // Optionally, reset the status bar color to default when disposing
+  //   SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+  //     statusBarColor: Colors.transparent, // Reset to default color
+  //     statusBarIconBrightness: Brightness.light, // Reset icon brightness
+  //     systemNavigationBarColor:
+  //         Colors.black, // Reset navigation bar color to default
+  //     systemNavigationBarIconBrightness:
+  //         Brightness.light, // Reset navigation bar icons color
+  //   ));
+
+  //   super.dispose();
+  // }
+
   @override
   Widget build(BuildContext context) {
     final double screenHeight = MediaQuery.of(context).size.height;

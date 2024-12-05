@@ -6,6 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:pretty_animated_buttons/configs/pkg_sizes.dart';
 
 class ForgotPasswordSection extends StatefulWidget {
   const ForgotPasswordSection({super.key});
@@ -34,7 +35,7 @@ class _ForgotPasswordSectionState extends State<ForgotPasswordSection> {
           showMessage(
             context: context,
             message: "No internet connection. Please check your connection.",
-            duration: Duration(milliseconds: 1500),
+            duration: duration300,
             typeColor: AnimatedSnackBarType.error,
           );
         }
@@ -60,7 +61,7 @@ class _ForgotPasswordSectionState extends State<ForgotPasswordSection> {
               showMessage(
                 context: context,
                 message: e.code.toString(),
-                duration: const Duration(milliseconds: 1500),
+                duration: duration300,
                 typeColor: AnimatedSnackBarType.error,
               );
             }
@@ -71,7 +72,7 @@ class _ForgotPasswordSectionState extends State<ForgotPasswordSection> {
               context: context,
               message:
                   "Kindly resolve the issue to continue creating an account.",
-              duration: Duration(milliseconds: 1500),
+              duration: duration300,
               typeColor: AnimatedSnackBarType.error,
             );
           }
@@ -82,7 +83,7 @@ class _ForgotPasswordSectionState extends State<ForgotPasswordSection> {
         showMessage(
           context: context,
           message: e.code.toString(),
-          duration: const Duration(milliseconds: 1500),
+          duration: duration300,
           typeColor: AnimatedSnackBarType.error,
         );
       }
@@ -179,7 +180,7 @@ class _ForgotPasswordSectionState extends State<ForgotPasswordSection> {
                             context: context,
                             message:
                                 "Password reset link has been sent to ${_emailController.text.trim()}.",
-                            duration: Duration(milliseconds: 1500),
+                            duration: duration300,
                             typeColor: AnimatedSnackBarType.success,
                           );
                           FluroRouterSetup.router.navigateTo(

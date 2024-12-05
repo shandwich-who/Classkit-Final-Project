@@ -9,6 +9,7 @@ import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:pretty_animated_buttons/configs/pkg_sizes.dart';
 
 class LoginSection extends StatefulWidget {
   const LoginSection({super.key});
@@ -31,7 +32,7 @@ class _LoginSectionState extends State<LoginSection> {
           showMessage(
             context: context,
             message: "No internet connection. Please check your connection.",
-            duration: Duration(milliseconds: 1500),
+            duration: duration300,
             typeColor: AnimatedSnackBarType.error,
           );
         }
@@ -48,7 +49,7 @@ class _LoginSectionState extends State<LoginSection> {
               showMessage(
                 context: context,
                 message: e.code.toString(),
-                duration: Duration(milliseconds: 1500),
+                duration: duration300,
                 typeColor: AnimatedSnackBarType.error,
               );
             }
@@ -58,7 +59,7 @@ class _LoginSectionState extends State<LoginSection> {
             showMessage(
               context: context,
               message: "Kindly resolve the issue to continue logging in.",
-              duration: Duration(milliseconds: 1500),
+              duration: duration300,
               typeColor: AnimatedSnackBarType.error,
             );
           }
@@ -69,7 +70,7 @@ class _LoginSectionState extends State<LoginSection> {
         showMessage(
           context: context,
           message: e.code.toString(),
-          duration: Duration(milliseconds: 1500),
+          duration: duration300,
           typeColor: AnimatedSnackBarType.error,
         );
       }
@@ -94,7 +95,7 @@ Future<User?> _googleSignIn() async {
     showMessage(
         context: mounted ? context : context,
         message: "Google Sign In Error: $e",
-        duration: Duration(milliseconds: 1500),
+        duration: duration300,
         typeColor: AnimatedSnackBarType.error,
       );
     return null;
@@ -110,7 +111,7 @@ Future<void> _handleGoogleSignIn(BuildContext context) async {
       showMessage(
         context: mounted ? context : context,
         message: "No internet connection. Please check your connection.",
-        duration: Duration(milliseconds: 1500),
+        duration: duration300,
         typeColor: AnimatedSnackBarType.error,
       );
       return;
@@ -137,7 +138,7 @@ Future<void> _handleGoogleSignIn(BuildContext context) async {
       showMessage(
         context: mounted ? context : context,
         message: "Google Sign-In Aborted",
-        duration: Duration(milliseconds: 1500),
+        duration: duration300,
         typeColor: AnimatedSnackBarType.error,
       );
     }
@@ -145,21 +146,21 @@ Future<void> _handleGoogleSignIn(BuildContext context) async {
     showMessage(
       context: mounted ? context : context,
       message: "Authentication Error: ${e.code}",
-      duration: Duration(milliseconds: 1500),
+     duration: duration300,
       typeColor: AnimatedSnackBarType.error,
     );
   } on PlatformException catch (e) {
     showMessage(
       context: mounted ? context : context,
       message: "Error: ${e.code}",
-      duration: Duration(milliseconds: 1500),
+     duration: duration300,
       typeColor: AnimatedSnackBarType.error,
     );
   } catch (e) {
     showMessage(
       context: mounted ? context : context,
       message: "Unexpected Error: $e",
-      duration: Duration(milliseconds: 1500),
+     duration: duration300,
       typeColor: AnimatedSnackBarType.error,
     );
   }

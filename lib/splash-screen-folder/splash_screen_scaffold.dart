@@ -12,17 +12,18 @@ class SplashScreenScaffold extends StatefulWidget {
 class _SplashScreenScaffoldState extends State<SplashScreenScaffold> {
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setSystemUIOverlayStyle(
-      const SystemUiOverlayStyle(
-        systemNavigationBarColor: Colors.white,
+    // SystemChrome.setSystemUIOverlayStyle(
+    //   const SystemUiOverlayStyle(
+    //     systemNavigationBarColor: Colors.white,
         
-      ),
-    );
+    //   ),
+    // );
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: const Scaffold(
 
         backgroundColor: Colors.white,
+        
         body: SplashScreenSection(),
       ),
       theme: ThemeData(useMaterial3: false),

@@ -6,12 +6,13 @@ import 'package:finals/show-message-folder/show_message.dart';
 import 'package:finals/text-form-field-validator-folder/validator_section.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:pretty_animated_buttons/configs/pkg_sizes.dart';
 import 'package:pretty_animated_buttons/pretty_animated_buttons.dart';
 
 final TextEditingController _idController = TextEditingController();
 final TextEditingController _nameController = TextEditingController();
 final TextEditingController _priceController = TextEditingController();
-final TextEditingController _quantityController = TextEditingController();
+final TextEditingController _stockController = TextEditingController();
 final _formKey = GlobalKey<FormState>();
 
 class FloatActButton extends StatefulWidget {
@@ -30,7 +31,7 @@ class _FloatActButtonState extends State<FloatActButton> {
       },
       backgroundColor: Colors.blue[900],
       child: Icon(
-        Icons.add,
+        Icons.add_rounded,
         size: 40,
         color: Colors.white,
       ),
@@ -106,9 +107,9 @@ void showCustomDialog(BuildContext context) {
                   ),
                   SizedBox(height: 20),
                   textFormField(
-                    txtController: _quantityController,
-                    validator: validateQuantity,
-                    labelText: "Quantity",
+                    txtController: _stockController,
+                    validator: validateStock,
+                    labelText: "Stock",
                     keyboardType: TextInputType.number,
                   ),
                   // SizedBox(height: 10),
@@ -156,7 +157,7 @@ class _NewButtonState extends State<NewButton> {
                       _idController.clear();
                       _nameController.clear();
                       _priceController.clear();
-                      _quantityController.clear();
+                      _stockController.clear();
 
                       Navigator.of(mounted ? context : context,
                               rootNavigator: true)
@@ -164,7 +165,7 @@ class _NewButtonState extends State<NewButton> {
                     } catch (e) {
                       showMessage(
                           context: mounted ? context : context,
-                          duration: Duration(milliseconds: 1500),
+                          duration: duration300,
                           message: e.toString(),
                           typeColor: AnimatedSnackBarType.error);
                     }
@@ -186,25 +187,25 @@ class _NewButtonState extends State<NewButton> {
                           int.parse(_idController.text),
                           _nameController.text,
                           double.parse(_priceController.text),
-                          int.parse(_quantityController.text),
+                          int.parse(_stockController.text),
                         );
                         showMessage(
                             context: mounted ? context : context,
-                            duration: Duration(milliseconds: 1500),
+                            duration: duration300,
                             message: "Already Added",
                             typeColor: AnimatedSnackBarType.success);
 
                         _idController.clear();
                         _nameController.clear();
                         _priceController.clear();
-                        _quantityController.clear();
+                        _stockController.clear();
                         Navigator.of(mounted ? context : context,
                                 rootNavigator: true)
                             .pop();
                       } else {
                         showMessage(
                             context: mounted ? context : context,
-                            duration: Duration(milliseconds: 1500),
+                            duration: duration300,
                             message:
                                 "There are some errors please fix it before proceeding",
                             typeColor: AnimatedSnackBarType.error);
@@ -212,7 +213,7 @@ class _NewButtonState extends State<NewButton> {
                     } catch (e) {
                       showMessage(
                           context: mounted ? context : context,
-                          duration: Duration(milliseconds: 1500),
+                          duration: duration300,
                           message: e.toString(),
                           typeColor: AnimatedSnackBarType.error);
                     }

@@ -85,15 +85,15 @@ String? validatePrice(String? value) {
   return null;
 }
 
-String? validateQuantity(String? value) {
+String? validateStock(String? value) {
   if (value == null || value.isEmpty) {
-    return "Quantity is required";
+    return "Stock is required";
   }
   if (int.tryParse(value) == null) {
-    return "Enter a valid quantity";
+    return "Enter a valid stock";
   }
   if (int.parse(value) <= 0) {
-    return "Quantity must be greater than 0";
+    return "Stock must be greater than 0";
   }
   return null;
 }

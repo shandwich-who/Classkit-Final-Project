@@ -4,10 +4,11 @@ import 'package:finals/service-folder/firestore.dart';
 import 'package:finals/show-message-folder/show_message.dart';
 import 'package:finals/text-form-field-validator-folder/validator_section.dart';
 import 'package:flutter/material.dart';
+import 'package:pretty_animated_buttons/configs/pkg_sizes.dart';
 
 final _formKey = GlobalKey<FormState>();
 final FireStoreService _fireStoreService = FireStoreService();
-TextEditingController quantityController = TextEditingController();
+TextEditingController stockController = TextEditingController();
 TextEditingController priceController = TextEditingController();
 TextEditingController nameController = TextEditingController();
 
@@ -41,10 +42,16 @@ class _InventorySectionState extends State<InventorySection> {
             const SliverAppBar(
               pinned: false,
               centerTitle: true,
-              backgroundColor: Colors.indigo,
+              backgroundColor: Colors.white,
+              clipBehavior: Clip.none,
+              elevation: 5,
+              shadowColor: Colors.black,
+              forceElevated: true,
               flexibleSpace: FlexibleSpaceBar(
                 centerTitle: true,
-                title: Text("List of the Items"),
+                title: Text("List of the Items",
+                    style: TextStyle(
+                        color: Colors.black, fontWeight: FontWeight.bold)),
               ),
             ),
             SliverSafeArea(
@@ -59,7 +66,7 @@ class _InventorySectionState extends State<InventorySection> {
                       itemId: itemData['item_id'],
                       name: itemData['name'],
                       price: itemData['price'],
-                      quantity: itemData['quantity'],
+                      stock: itemData['stock'],
                       onEdit: () =>
                           showEditForm(context, currentDocID, itemData),
                       onDelete: () async {
@@ -82,7 +89,7 @@ class Item {
   final int itemId;
   final String name;
   final double price;
-  final int quantity;
+  final int stock;
 
   // final String imageAsset;
 
@@ -90,7 +97,7 @@ class Item {
     required this.itemId,
     required this.name,
     required this.price,
-    required this.quantity,
+    required this.stock,
     // required this.imageAsset,
   });
 }
@@ -99,7 +106,7 @@ class ListItem extends StatelessWidget {
   final int itemId;
   final String name;
   final double price;
-  final int quantity;
+  final int stock;
   final VoidCallback onEdit;
   final VoidCallback onDelete;
 
@@ -108,7 +115,7 @@ class ListItem extends StatelessWidget {
     required this.itemId,
     required this.name,
     required this.price,
-    required this.quantity,
+    required this.stock,
     required this.onEdit,
     required this.onDelete,
   });
@@ -121,13 +128,13 @@ class ListItem extends StatelessWidget {
         color: Colors.blue[900],
         alignment: Alignment.centerLeft,
         padding: const EdgeInsets.symmetric(horizontal: 20),
-        child: const Icon(Icons.edit, color: Colors.white),
+        child: const Icon(Icons.edit_rounded, color: Colors.white),
       ),
       secondaryBackground: Container(
         color: Colors.red[900],
         alignment: Alignment.centerRight,
         padding: const EdgeInsets.symmetric(horizontal: 20),
-        child: const Icon(Icons.delete, color: Colors.white),
+        child: const Icon(Icons.delete_rounded, color: Colors.white),
       ),
       confirmDismiss: (direction) async {
         if (direction == DismissDirection.startToEnd) {
@@ -143,8 +150,14 @@ class ListItem extends StatelessWidget {
         return false;
       },
       child: Card(
+        elevation: 5,
+        // color: Colors.black,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(15),
+        ),
         margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
         child: ListTile(
+          
           leading: Container(
             decoration: BoxDecoration(
               border: Border.all(
@@ -163,7 +176,7 @@ class ListItem extends StatelessWidget {
           ),
           title: Text('$itemId: $name'),
           subtitle:
-              Text('Price: ₱${price.toStringAsFixed(2)}, Quantity: $quantity'),
+              Text('Price: ₱${price.toStringAsFixed(2)}, Stock: $stock'),
           // trailing: const Icon(Icons.more_vert),
         ),
       ),
@@ -211,7 +224,7 @@ class ListItem extends StatelessWidget {
                         Navigator.of(context).pop(true);
                         showMessage(
                             context: context,
-                            duration: Duration(milliseconds: 1500),
+                            duration: duration300,
                             message: "Already Deleted",
                             typeColor: AnimatedSnackBarType.info);
                       },
@@ -298,11 +311,11 @@ void showEditForm(
                     validator: validatePrice),
                 SizedBox(height: 20),
                 textFormField(
-                    labelText: "Quantity",
-                    hintText: "${data['quantity']}",
+                    labelText: "Stock",
+                    hintText: "${data['stock']}",
                     keyboardType: TextInputType.number,
-                    txtController: quantityController,
-                    validator: validateQuantity),
+                    txtController: stockController,
+                    validator: validateStock),
               ]),
             ),
           ),
@@ -321,7 +334,7 @@ void showEditForm(
                         onPressed: () {
                           nameController.clear();
                           priceController.clear();
-                          quantityController.clear();
+                          stockController.clear();
                           Navigator.of(context).pop(false);
                         },
                         style: ElevatedButton.styleFrom(
@@ -340,21 +353,21 @@ void showEditForm(
                               docID!,
                               nameController.text,
                               double.parse(priceController.text),
-                              int.parse(quantityController.text),
+                              int.parse(stockController.text),
                             );
                             showMessage(
                                 context: context,
-                                duration: Duration(milliseconds: 1500),
+                                duration: duration300,
                                 message: "Already Updated",
                                 typeColor: AnimatedSnackBarType.info);
                             nameController.clear();
                             priceController.clear();
-                            quantityController.clear();
+                            stockController.clear();
                             Navigator.of(context, rootNavigator: true).pop();
                           } else {
                             showMessage(
                                 context: context,
-                                duration: Duration(milliseconds: 1500),
+                                duration: duration300,
                                 message:
                                     "Please Fix the Errors Before you Proceed",
                                 typeColor: AnimatedSnackBarType.error);

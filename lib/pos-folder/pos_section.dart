@@ -3,8 +3,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:finals/service-folder/firestore.dart';
 import 'package:finals/show-message-folder/show_message.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
+import 'package:pretty_animated_buttons/configs/pkg_sizes.dart';
 
 class PosSection extends StatefulWidget {
   const PosSection({super.key});
@@ -30,8 +33,8 @@ class _PosSectionState extends State<PosSection> {
 
   @override
   void dispose() {
-    super.dispose();
     _searchController;
+    super.dispose();
   }
 
   Future<void> _checkNetworkConnection() async {
@@ -69,7 +72,34 @@ class _PosSectionState extends State<PosSection> {
                   ),
                   actions: [
                     IconButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        FluroRouterSetup.router.navigateTo(
+                          context,
+                          '/cartScaffold',
+                          transition: TransitionType.custom,
+                          transitionDuration: Duration(milliseconds: 800),
+                          transitionBuilder:
+                              (context, animation, secondaryAnimation, child) {
+                            return AnimatedBuilder(
+                              animation: animation,
+                              builder: (context, child) {
+                                final opacity =
+                                    Curves.easeIn.transform(animation.value);
+                                final scale =
+                                    Curves.easeInOut.transform(animation.value);
+                                return Opacity(
+                                  opacity: opacity,
+                                  child: Transform.scale(
+                                    scale: scale,
+                                    child: child,
+                                  ),
+                                );
+                              },
+                              child: child,
+                            );
+                          },
+                        );
+                      },
                       icon: SizedBox(
                         height: 30,
                         width: 30,
@@ -157,7 +187,7 @@ class _PosSectionState extends State<PosSection> {
                           return GestureDetector(
                             onTap: () {
                               _showAddToCartDialog(context, item['name'],
-                                  item['price'], item['quantity']);
+                                  item['price'], item['stock']);
                             },
                             child: Card(
                               color: Colors.grey[200],
@@ -237,8 +267,8 @@ class _PosSectionState extends State<PosSection> {
     );
   }
 
-  void _showAddToCartDialog(BuildContext context, String itemName,
-      double itemPrice, int itemQuantity) {
+  void _showAddToCartDialog(
+      BuildContext context, String itemName, double itemPrice, int itemStock) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -276,7 +306,7 @@ class _PosSectionState extends State<PosSection> {
                       style:
                           TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                     ),
-                    Text("$itemPrice", style: TextStyle(fontSize: 20)),
+                    Text("₱$itemPrice", style: TextStyle(fontSize: 20)),
                   ],
                 ),
                 SizedBox(
@@ -285,11 +315,11 @@ class _PosSectionState extends State<PosSection> {
                 Row(
                   children: [
                     Text(
-                      "Quantity: ",
+                      "Stock: ",
                       style:
                           TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                     ),
-                    Text("$itemQuantity", style: TextStyle(fontSize: 20)),
+                    Text("$itemStock", style: TextStyle(fontSize: 20)),
                   ],
                 ),
               ],
@@ -314,15 +344,51 @@ class _PosSectionState extends State<PosSection> {
                       ),
                       child: Text("Cancel")),
                   ElevatedButton(
-                    onPressed: () {
-                      _fireStoreService.addToCart(
-                          itemName, itemPrice, itemQuantity);
-                      showMessage(
+                    onPressed: () async {
+                      if (itemStock <= 0) {
+                        showMessage(
                           context: context,
-                          message: "Item added to cart",
-                          duration: Duration(seconds: 1),
-                          typeColor: AnimatedSnackBarType.success);
-                      Navigator.of(context, rootNavigator: true).pop();
+                          message: "Not enough stock",
+                          duration: duration300,
+                          typeColor: AnimatedSnackBarType.error,
+                        );
+                        Navigator.of(context, rootNavigator: true).pop();
+                      } else {
+                        final CollectionReference cartItems = FirebaseFirestore
+                            .instance
+                            .collection('users')
+                            .doc(FirebaseAuth.instance.currentUser!.uid)
+                            .collection('cart_items');
+                        final query =
+                            cartItems.where('name', isEqualTo: itemName);
+                        final snapshot = await query.get();
+                        if (snapshot.docs.isNotEmpty) {
+                          // Item exists in cart, update quantity
+                          final existingItem = snapshot.docs.first;
+                          final currentQuantity =
+                              existingItem['quantity'] as int;
+                          await existingItem.reference
+                              .update({'quantity': currentQuantity + 1});
+                          showMessage(
+                            context: mounted ? context : context,
+                            message: "Item quantity updated in cart",
+                            duration: duration300,
+                            typeColor: AnimatedSnackBarType.success,
+                          );
+                        } else {
+                          // Item doesn't exist in cart, add it
+                          _fireStoreService.addToCart(itemName, itemPrice, 1);
+                          showMessage(
+                            context: mounted ? context : context,
+                            message: "Item added to cart",
+                            duration: duration300,
+                            typeColor: AnimatedSnackBarType.success,
+                          );
+                        }
+                        Navigator.of(mounted ? context : context,
+                                rootNavigator: true)
+                            .pop();
+                      }
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.green[700],

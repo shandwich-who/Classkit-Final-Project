@@ -7,6 +7,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:pretty_animated_buttons/configs/pkg_sizes.dart';
 
 
 class SignupSection extends StatefulWidget {
@@ -42,7 +43,7 @@ Future<void> _signUserUp() async {
         showMessage(
           context: context,
           message: "No internet connection. Please check your connection.",
-          duration: Duration(milliseconds: 1500),
+          duration: duration300,
           typeColor: AnimatedSnackBarType.error,
         );
       }
@@ -70,7 +71,7 @@ Future<void> _signUserUp() async {
             showMessage(
               context: context,
               message: "Signup successful!",
-              duration: Duration(milliseconds: 1500),
+              duration: duration300,
               typeColor: AnimatedSnackBarType.success,
             );
           }
@@ -79,7 +80,7 @@ Future<void> _signUserUp() async {
             showMessage(
               context: context,
               message: e.message ?? "An error occurred.",
-              duration: Duration(milliseconds: 1500),
+              duration: duration300,
               typeColor: AnimatedSnackBarType.error,
             );
           }
@@ -90,7 +91,7 @@ Future<void> _signUserUp() async {
             context: context,
             message:
                 "Kindly resolve the issue to continue creating an account.",
-            duration: Duration(milliseconds: 1500),
+            duration: duration300,
             typeColor: AnimatedSnackBarType.error,
           );
         }
@@ -100,7 +101,7 @@ Future<void> _signUserUp() async {
     if (mounted) {
       showMessage(
           context: context,
-          duration: Duration(milliseconds: 1500),
+          duration: duration300,
           message: e.code.toString(),
           typeColor: AnimatedSnackBarType.error);
     }

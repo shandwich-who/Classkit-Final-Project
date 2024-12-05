@@ -8,12 +8,12 @@ class SignupScaffold extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setSystemUIOverlayStyle(
-      const SystemUiOverlayStyle(
-        systemNavigationBarColor: Colors.white,
-        // statusBarColor: Colors.transparent,
-      ),
-    );
+    // SystemChrome.setSystemUIOverlayStyle(
+    //   const SystemUiOverlayStyle(
+    //     systemNavigationBarColor: Colors.white,
+    //     // statusBarColor: Colors.transparent,
+    //   ),
+    // );
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: const Scaffold(
