@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:pretty_animated_buttons/configs/pkg_sizes.dart';
 import 'package:pretty_animated_buttons/pretty_animated_buttons.dart';
 
 class SettingsSection extends StatefulWidget {
@@ -31,7 +32,7 @@ class _SettingsSectionState extends State<SettingsSection> {
           showMessage(
             context: context,
             message: "No internet connection. Please check your connection.",
-            duration: Duration(milliseconds: 1500),
+            duration: duration300,
             typeColor: AnimatedSnackBarType.error,
             
           );
@@ -51,7 +52,7 @@ class _SettingsSectionState extends State<SettingsSection> {
             showMessage(
               context: context,
               message: "Signed out successfully",
-              duration: const Duration(milliseconds: 1500),
+              duration: duration300,
               typeColor: AnimatedSnackBarType.success,
             );
           }
@@ -61,7 +62,7 @@ class _SettingsSectionState extends State<SettingsSection> {
             showMessage(
               context: context,
               message: message,
-              duration: const Duration(milliseconds: 1500),
+              duration: duration300,
               typeColor: AnimatedSnackBarType.error,
             );
           }
@@ -76,7 +77,7 @@ class _SettingsSectionState extends State<SettingsSection> {
         showMessage(
           context: context,
           message: "Error signing out: ${e.code.toString()}",
-          duration: const Duration(milliseconds: 1500),
+          duration: duration300,
           typeColor: AnimatedSnackBarType.error,
         );
       }

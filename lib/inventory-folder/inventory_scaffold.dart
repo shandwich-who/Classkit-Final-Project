@@ -20,7 +20,9 @@ class InventoryScaffold extends StatelessWidget {
     SystemChrome.setSystemUIOverlayStyle(
       const SystemUiOverlayStyle(
         systemNavigationBarColor: Colors.white,
-        // statusBarColor: Colors.transparent,
+        
+        statusBarColor: Colors.transparent,
+        statusBarIconBrightness: Brightness.light,
       ),
     );
 

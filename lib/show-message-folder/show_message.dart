@@ -1,5 +1,6 @@
 import 'package:animated_snack_bar/animated_snack_bar.dart';
 import 'package:finals/auth-folder/auth.dart';
+import 'package:finals/cart-folder/cart_scaffold.dart';
 import 'package:finals/dashboard-folder/dashboard.dart';
 import 'package:finals/forget-password-folder/forgot_password_scaffold.dart';
 import 'package:finals/inventory-folder/inventory_scaffold.dart';
@@ -98,6 +99,14 @@ class FluroRouterSetup {
             InventoryScaffold(), 
       ),
     );
+    router.define(
+      '/cartScaffold',
+      handler: Handler(
+        handlerFunc: (context, params) =>
+            CartScaffold(), 
+      ),
+    );
+    
 
   }
 }
