@@ -444,11 +444,9 @@ class _CartSectionState extends State<CartSection> {
                   for (var item in items) {
                     await _fireStoreService.deleteCart(item['id']);
                   }
-
                   setState(() {
                     _selectedItems.clear();
                   });
-
                   showMessage(
                       context: mounted ? context : context,
                       message: "Check Out Completed",
